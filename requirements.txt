@@ -1,0 +1,11 @@
+pynput
+opencv-python
+pywin32
+numpy==1.26.4
+pyyaml
+pydantic
+paddleocr==2.10.0
+psutil
+pyqt5
+pygame
+onnxruntime

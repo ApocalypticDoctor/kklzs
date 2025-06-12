@@ -11,5 +11,6 @@
 我们将严厉打击使用外挂、加速器、作弊软件、宏脚本等违规工具的行为，这些行为包括但不限于自动挂机、技能加速、无敌模式、瞬移、修改游戏数据等操作。
 一经查证，我们将视违规情况和次数，采取包括但不限于扣除违规收益、冻结或永久封禁游戏账号等措施。
 ```
-卡卡罗助手是mc_auto_boss的前身(https://github.com/lazydog28/mc_auto_boss](https://github.com/lazydog28/mc_auto_boss), 在其基础上进行不断迭代。
+卡卡罗助手是mc_auto_boss的前身((https://github.com/lazydog28/mc_auto_boss), 在其基础上进行不断迭代。
 主要功能有自动刷boss,合成锁定(4C)声骸,清体力
+# 特别说明 卡卡罗助手需要解压到全英文路径
