@@ -132,7 +132,6 @@ def fight(tactics, flag):
                         control.fight_click()
                     else:
                         control.tap(tactic[0])
-                    time.sleep(0.05)
                     pool.submit(over_fight)
     return False  # 所有策略执行完后返回
 
@@ -166,6 +165,8 @@ bossDict = {
     "梦魇燎照之骑": 4,
     "梦魇哀声鸷": 5,
     "梦魇辉萤军势": 2,
+    "梦魇凯尔匹": 6,
+    "荣耀狮像": 4
 }
 
 
@@ -670,7 +671,10 @@ def absorption_action():
     a = int(86400 - (time.time() - datetime(2025, 3, 3, 4, 0, 0).timestamp()) % 86400)
     if a < 20:
         time.sleep(a + 5)
-    time.sleep(1)
+    while True:
+        img = screenshot()
+        if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 角色图标
+            break
     control.tap("1")
     control.mouse_middle()
     if absorption_and_receive_rewards():
@@ -688,7 +692,7 @@ def absorption_action():
     if info.bossName in ["梦魇哀声鸷"]:
         count = 3
     else:
-        count = 5
+        count = 7
     for _ in range(count):
         forward(0.7)
         if absorption_and_receive_rewards():
@@ -855,17 +859,17 @@ def check_echo_set(image, x1, y1, x2, y2):
 
 def check_echo_set2(image, flag, tz):
     try:
+        image = cv2.resize(image, (1920, 1080), interpolation=cv2.INTER_LINEAR)
         if flag == 1:
-            image = image[int(1 * height_ratio):int(1 * height_ratio), int(1 * width_ratio):int(1 * width_ratio)]
+            image = image[315:360, 830:870]
         else:
-            image = image[int(2 * height_ratio):int(2 * height_ratio), int(2 * width_ratio):int(2 * width_ratio)]
+            image = image[310:345, 1430:1470]
         for i in tz:
             temp = cv2.imdecode(np.fromfile(f"{root_path}/template/{i}/1.png", dtype=np.uint8), 1)
             res = cv2.matchTemplate(image, temp, cv2.TM_CCOEFF_NORMED)
-            loc = np.where(res >= 0.7)
+            loc = np.where(res >= 0.6)
             for pt in zip(*loc[::-1]):
                 return i
-
     except Exception as e:
         logger("识别套装失败" + str(e), "红")
         return "??"
@@ -915,7 +919,7 @@ def is_lock():
     elif this_echo_name == "角鳄":
         this_echo_set = check_echo_set2(image, 1, ["愿戴荣光之旅", "奔狼燎原之焰"])
         this_echo_cost = "3"
-    elif this_echo_name == "梦魇·凯尔匹":
+    elif this_echo_name in ["梦魇·凯尔匹", "共鸣回响·芙露德莉斯"]:
         this_echo_set = check_echo_set2(image, 1, ["流云逝尽之空", "愿戴荣光之旅"])
         this_echo_cost = "4"
     else:
@@ -1130,7 +1134,7 @@ def lock_4c(flag):
                     this_echo_set = "轻云出月"
                 elif this_echo_name == "异构武装":
                     this_echo_set = "凌冽决断之心"
-                elif this_echo_name == "梦魇·凯尔匹":
+                elif this_echo_name in ["梦魇·凯尔匹", "共鸣回响·芙露德莉斯"]:
                     this_echo_set = check_echo_set2(img, 2, ["流云逝尽之空", "愿戴荣光之旅"])
                 else:
                     this_echo_set = check_echo_set(img, 1300, 675, 1850, 865)  # 识别套装属性

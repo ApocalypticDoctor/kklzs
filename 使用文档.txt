@@ -1,3 +1,6 @@
+也可以直接去下载一个python 然后直接做最后两步
+
+
 安装好Miniconda3后 用管理员打开power shell
 如果出现了 加载个人及系统配置文件用了 xxx毫秒 运行以下代码
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
@@ -11,14 +14,9 @@ set-executionpolicy remotesigned 选a 然后重启仍然cd到condabin目录运�
 
 所有询问都按y
 conda create -n kkl python=3.10.11
-conda activate mc
-N卡用户运行(paddle-gpu下不动的换网络 手机开热点挺快的)  (2选1 第二个也许需要额外下载)
-conda install paddlepaddle-gpu==3.0.0b1 paddlepaddle-cuda=12.3 -c paddle -c nvidia
-python -m pip install paddlepaddle-gpu==2.5.2.post120 -f https://www.paddlepaddle.org.cn/whl/windows/mkl/avx/stable.html
-
-A卡用户运行
-python -m pip install paddlepaddle==2.5.2 -i https://pypi.tuna.tsinghua.edu.cn/simple
-安装完成后cd到kklzs目录运行
+conda activate kkl
+cd到kklzs目录运行
+pip install paddlepaddle==2.5.2 -i https://pypi.tuna.tsinghua.edu.cn/simple
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple 
 
 

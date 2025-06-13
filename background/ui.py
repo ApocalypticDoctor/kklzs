@@ -1184,6 +1184,7 @@ class Ui_MainWindow(object):
         self.lockButton.setEnabled(False)
         self.overButton.setEnabled(True)
         threading.Thread(target=self.action).start()
+        threading.Thread(target=self.ys).start()
 
     def startSynthesis(self):
         self.name = "合成"
