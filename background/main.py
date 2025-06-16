@@ -67,7 +67,6 @@ class LoginWindow(QMainWindow):
 if __name__ == "__main__":
     multiprocessing.freeze_support()
     if not ctypes.windll.shell32.IsUserAnAdmin():
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, os.path.abspath(sys.argv[0]), None, 0)
         sys.exit(0)
     app = QApplication(sys.argv)
     window = LoginWindow()

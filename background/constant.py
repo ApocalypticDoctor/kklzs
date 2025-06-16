@@ -1,5 +1,3 @@
-import ctypes
-
 import win32gui
 import sys
 from ctypes import windll
@@ -10,9 +8,6 @@ root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 hwnd = win32gui.FindWindow("UnrealWindow", "鸣潮  ")
 if hwnd == 0:
     print("先启动游戏 再启动脚本啊 屌毛!红")
-    sys.exit(0)
-if ctypes.windll.shell32.IsUserAnAdmin() == 0:
-    print("管理员启动程序啊 屌毛!红")
     sys.exit(0)
 left, top, right, bot = win32gui.GetClientRect(hwnd)
 w = right - left
