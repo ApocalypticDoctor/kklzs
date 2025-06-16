@@ -29,6 +29,7 @@ index = 0  # 实际索引
 keyflag = False  # 梦魇复刷往前跑
 mutex = threading.Lock()
 die = []
+x, y = (0, 46)
 pool = concurrent.futures.ThreadPoolExecutor(max_workers=8)
 fightDict = {
     "a": control.fight_click,
@@ -169,6 +170,36 @@ bossDict = {
     "荣耀狮像": 4
 }
 
+booPoint = {
+    "鸣钟之龟": 799,
+    "无妄者": 878,
+    "角": 838,
+    "赫卡忒": 813,
+    "芙露德莉斯": 851,
+    "朔雷之鳞": 799,
+    "燎照之骑": 799,
+    "无常凶鹭": 799,
+    "辉萤军势": 799,
+    "飞廉之猩": 799,
+    "哀声鸷": 799,
+    "无冠者": 799,
+    "聚械机偶": 865,
+    "云闪之鳞": 799,
+    "无归的谬误": 773,
+    "罗蕾莱": 813,
+    "异构武装": 799,
+    "叹息古龙": 799,
+    "梦魇飞廉之猩": 758,
+    "梦魇无常凶鹭": 758,
+    "梦魇云闪之鳞": 758,
+    "梦魇朔雷之鳞": 758,
+    "梦魇无冠者": 773,
+    "梦魇燎照之骑": 758,
+    "梦魇哀声鸷": 773,
+    "梦魇辉萤军势": 758,
+    "梦魇凯尔匹": 773,
+    "荣耀狮像": 799
+}
 
 def transfer_to_boss():
     random_click(77, 577 + tempy)  # 残像探寻
@@ -197,12 +228,15 @@ def transfer_to_boss():
     time.sleep(2)
     wait_home()
     logger("传送完成", flag=False)
-    move_boss()
+    if info.bossName in ["无妄者", "角", "赫卡忒"]:
+        forward(0.8)
+    elif info.bossName != "芙露德莉斯":
+        move_boss()
     info.lastFightTime = datetime.now()  # 重置最近检测到战斗时间
 
 
 def move_boss(flag=True):
-    if info.bossName != "梦魇辉萤军势":
+    if info.bossName not in ["梦魇辉萤军势", "梦魇云闪之鳞"]:
         control.mouse_middle()
     if info.bossName == "罗蕾莱" and not find_text(20, 265, 320, 310, "击败") and flag:
         control.esc()
@@ -245,27 +279,19 @@ def transfer_to_dreamless():
     time.sleep(0.3)
     random_click(400, 620)  # 战歌重奏
     time.sleep(0.3)
-    if info.bossName == "无妄者":
-        random_click(1720, 470)  # 无妄者
-    elif info.bossName == "角":
-        random_click(1720, 630)  # 角
-    elif info.bossName == "赫卡忒":
-        random_click(1720, 780)  # 赫卡忒
-    elif info.bossName == "芙露德莉斯":
-        random_click(1720, 930)  # 芙露德莉斯
-        # time.sleep(0.3)
-        # if find_text(1230, 640, 1370, 700, "确认"):
-        #     random_click(1300, 680)
-        #     time.sleep(0.5)
-        #     return True
+    random_click(1720, 320)  # 新周本
+    time.sleep(0.3)
+    if find_text(1230, 640, 1370, 700, "确认"):
+        random_click(1300, 680)
+        time.sleep(0.5)
+        return True
     time.sleep(1)
     random_click(1600, 1000)  # 快速旅行
     random_click(1600, 1000)  # 快速旅行
     time.sleep(2)
     wait_home()
     logger("传送完成", flag=False)
-    if info.bossName != "芙露德莉斯":
-        forward(0.8)
+    forward(0.8)
     jinru()
     return True
 
@@ -303,7 +329,7 @@ def over_fight():
         mutex.acquire()
         if not t:
             t = time.time()
-        img = screenshot()
+        img = screenshot(1)
         if len(die) == 3:
             info.fighttype = ""
             info.overflag = True
@@ -326,7 +352,7 @@ def over_fight():
                 move_boss()
         if info.fighttype == "boss":
             if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all(): #  角色图标
-                if (img[int(63 * height_ratio), int(679 * width_ratio)] < [255, 255, 255]).all(): # boss没有血条
+                if (img[int(y * height_ratio), int(x * width_ratio)] < [255, 255, 255]).any(): # boss没有血条
                     info.fighttype = ""
                     info.overflag = True
                     t = None
@@ -383,7 +409,6 @@ def repeat_boss():
     time.sleep(2)
     wait_home()
     logger("传送完成", flag=False)
-    cv2.imwrite(f"../temp/{info.fightCount}.png", screenshot(1))
     move_boss(False)
     if "梦魇" not in info.bossName:
         if info.bossName in ["罗蕾莱", "异构武装"]:
@@ -433,7 +458,7 @@ def repeat_boss():
 
 
 def transfer():
-    global recovery, tempy, keyflag
+    global recovery, tempy, keyflag, x
     keyflag = False
     control.activate()
 
@@ -537,8 +562,9 @@ def transfer():
     info.waitBoss = True
     info.bossIndex += 1
     info.bossName = config.TargetBoss[info.bossIndex % len(config.TargetBoss)]
+    x = booPoint.get(info.bossName)
     logger(f"当前目标boss: {info.bossName}")
-    if info.bossName in ["无妄者", "角", "赫卡忒", "芙露德莉斯"]:
+    if info.bossName == "":
         return transfer_to_dreamless()
     else:
         return transfer_to_boss()
@@ -552,7 +578,7 @@ def jinru(flag=True, num=0):
         if info.bossName == "芙露德莉斯":
             time.sleep(5)
         # 推荐等级
-        time.sleep(1.7)
+        time.sleep(2)
         y = ((config.DungeonWeeklyBossLevel - 40) / 10) * 85 + 197
         random_click(311, y)  # 推荐等级
         random_click(311, y)
@@ -572,13 +598,15 @@ def jinru(flag=True, num=0):
         else:
             time.sleep(5)
     random_click(1720, 980)  # 单人挑战
+    time.sleep(0.2)
     if info.waveplate < 60:
-        time.sleep(0.5)
+        time.sleep(0.3)
         random_click(1250, 680)  # 结晶波片不足
-    time.sleep(1)
+    time.sleep(1.3)
     random_click(1650, 990)  # 开启挑战
-    time.sleep(1)
+    time.sleep(1.3)
     wait_home()
+    info.lastFightTime = datetime.now()
 
 
 def screenshot(flag=0) -> np.ndarray | None:
@@ -972,18 +1000,18 @@ def add_echo_list(img):
                     if not click_list:
                         for i in tzlist:
                             if abs(pt[0] - i[0] + 70) < 30 and abs(pt[1] - i[1]) < 30:
-                                # echo_mutex.acquire()
+                                echo_mutex.acquire()
                                 click_list.append((pt[0] + 30, pt[1] + 30))
                                 tzlist.remove(i)
                                 # cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
-                                # echo_mutex.release()
+                                echo_mutex.release()
                                 if not tzlist:
                                     return
                         if not tzlist:
-                            # echo_mutex.acquire()
+                            echo_mutex.acquire()
                             click_list.append((pt[0] + 30, pt[1] + 30))
                             # cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
-                            # echo_mutex.release()
+                            echo_mutex.release()
                     else:
                         for j in click_list:
                             if abs(j[0] - (pt[0] + 30)) < 30 and abs(j[1] - (pt[1] + 30)) < 30:
@@ -991,33 +1019,32 @@ def add_echo_list(img):
                             if j == click_list[-1]:
                                 for i in tzlist:
                                     if abs(pt[0] - i[0] + 70) < 30 and abs(pt[1] - i[1]) < 30:
-                                        # echo_mutex.acquire()
+                                        echo_mutex.acquire()
                                         click_list.append((pt[0] + 30, pt[1] + 30))
                                         tzlist.remove(i)
                                         # cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
-                                        # echo_mutex.release()
+                                        echo_mutex.release()
                                         if not tzlist:
                                             return
                                 if not tzlist:
-                                    # echo_mutex.acquire()
+                                    echo_mutex.acquire()
                                     click_list.append((pt[0] + 30, pt[1] + 30))
                                     # cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
-                                    # echo_mutex.release()
+                                    echo_mutex.release()
 
     logger("正在识别声骸...", "蓝", False)
     click_list = []
-    # threads = []
-    # echo_mutex = threading.Lock()
+    threads = []
+    echo_mutex = threading.Lock()
     tao = list(config.EchoLockConfig.keys())
     for i in tao:
         # if len(config.EchoLockConfig[i]["1COST"]) + len(config.EchoLockConfig[i]["3COST"]) == 0:
         #     continue
-        shibie(i)
-    #     thread = threading.Thread(target=shibie, args=(i,))
-    #     thread.start()
-    #     threads.append(thread)
-    # for thread in threads:
-    #     thread.join()
+        thread = threading.Thread(target=shibie, args=(i,))
+        thread.start()
+        threads.append(thread)
+    for thread in threads:
+        thread.join()
 
     click_list = sorted(click_list, key=lambda point: (point[1], point[0]))
     for i in range(len(click_list)):

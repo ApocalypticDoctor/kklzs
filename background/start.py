@@ -73,8 +73,12 @@ def run(task: Task, e: Event, q: Queue, ok: bool = False):
             p = psutil.Process(proc.info['pid'])
             p.terminate()  # 尝试正常终止进程
     if current_process().name == "boss":
-        # 热更 登录 战斗/离开 boss名
-        temp = [(1230, 665, 1330, 720), (890, 980, 1030, 1040), (20, 265, 320, 310), (660, 10, 1260, 80)]
+        if ok:
+            # 登录 热更 着色器
+            temp = [(890, 980, 1030, 1040), (1230, 665, 1330, 720), (130, 100, 200, 165), (100, 950, 330, 1000)]
+        else:
+            # 战斗/离开 boss名
+            temp = [(20, 265, 320, 310), (660, 10, 1260, 80)]
     elif current_process().name == "合成":
         # 合成 结束 全选 高级 获得
         temp = [(1330, 965, 1450, 1010), (830, 190, 1088, 235), (470, 970, 530, 1020), (870, 575, 1075, 615), (880, 150, 1040, 540)]
@@ -85,9 +89,12 @@ def run(task: Task, e: Event, q: Queue, ok: bool = False):
             for i in temp:
                 img1 = img[int(i[1] * height_ratio):int(i[3] * height_ratio), int(i[0] * width_ratio):int(i[2] * width_ratio)]
                 res += ocr(img1)
-            if task(img, res) == 1:
+            result = task(img, res)
+            if result == 1:
                 e.clear()
                 return
+            elif result == 2:
+                temp = [(20, 265, 320, 310), (660, 10, 1260, 80)]
     except Exception as e:
         logger(str(e) + " run", "红")
         return

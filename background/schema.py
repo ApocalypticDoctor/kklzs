@@ -247,6 +247,8 @@ class Task(BaseModel):
                         logger("背包上限,即将自动启动合成脚本", "蓝")
                         return 1
                     page.action(page.matchPositions)
+                    if page.name == "登录":
+                        return 2
                     return
             for conditionalAction in self.conditionalActions:
                 match_conditional_action = conditionalAction()

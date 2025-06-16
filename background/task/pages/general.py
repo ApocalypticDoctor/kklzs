@@ -7,11 +7,6 @@ pages = []
 
 # 击败 战斗状态
 def fight_action(positions: dict[str, Position]) -> bool:
-    """
-    击败 战斗状态
-    :param positions: 位置信息
-    :return:
-    """
     info.fightCount += 1
     info.ruleIndex = 0
     info.overflag = False
@@ -37,11 +32,6 @@ pages.append(fight_page)  # 战斗
 
 # 离开
 def leave_action(positions: dict[str, Position]) -> bool:
-    """
-    离开
-    :param positions: 位置信息
-    :return:
-    """
     absorption_action()
     time.sleep(0.3)
     control.esc()
@@ -93,7 +83,7 @@ leave_page = Page(
 pages.append(leave_page)  # 离开
 
 
-def login_action():
+def login_action(positions: dict[str, Position]) -> bool:
     def find_all_indices(s, target):
         return [j for j, char in enumerate(s) if char == target]
     control.activate()
@@ -135,18 +125,34 @@ login_page = Page(
 pages.append(login_page)  # 登录
 
 
-def hot_action() -> bool:
-    random_click(1285, 685)
-    random_click(1285, 685)
+def hot_action(positions: dict[str, Position]) -> bool:
+    _, pid = win32process.GetWindowThreadProcessId(hwnd)
+    psutil.Process(pid).terminate()
     return True
 hot_page = Page(
     name="热更",
     targetTexts=[
         TextMatch(
             name="退出",
-            text="退出",
+            text=template(r"(退出|公告)"),
         ),
     ],
     action=hot_action,
 )
 pages.append(hot_page)  # 热更
+
+def update_action(positions: dict[str, Position]) -> bool:
+    while "" in find_text(100, 950, 330, 1000, "着色器"):
+        pass
+    return True
+update_page = Page(
+    name="着色器",
+    targetTexts=[
+        TextMatch(
+            name="更新",
+            text="着色器",
+        ),
+    ],
+    action=update_action,
+)
+pages.append(update_page)  # 热更

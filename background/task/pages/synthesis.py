@@ -4,7 +4,7 @@ from . import *
 pages = []
 
 
-def automatically_placed_in():
+def automatically_placed_in(positions: dict[str, Position]) -> bool:
     """
     自动放入
     :param positions:
@@ -30,7 +30,7 @@ automatically_placed_in_page = Page(
 pages.append(automatically_placed_in_page)
 
 
-def end_echoes():
+def end_echoes(positions: dict[str, Position]) -> bool:
     """
     结束
     :param positions:
@@ -56,7 +56,7 @@ end_echoes_page = Page(
 pages.append(end_echoes_page)
 
 
-def all():
+def all(positions: dict[str, Position]) -> bool:
     control.activate()
     random_click(550, 990)
     random_click(1510, 990)
@@ -77,7 +77,7 @@ all_page = Page(
 pages.append(all_page)
 
 
-def tips():
+def tips(positions: dict[str, Position]) -> bool:
     """
     提示
     :param positions:
@@ -105,7 +105,7 @@ tips_page = Page(
 pages.append(tips_page)
 
 
-def get_echoes():
+def get_echoes(positions: dict[str, Position]) -> bool:
     """
     获取回音
     :param positions:
