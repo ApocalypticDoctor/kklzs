@@ -1,51 +1,35 @@
-import ctypes
+import io
 import json
 import os
-import shutil
-import subprocess
 import sys
-import time
+import zipfile
 
 import requests
-from git import Repo
 
 with open("../template/data.json", "r", encoding="utf-8") as f:
     version_now = json.load(f)["version"]
 
 version_url = "https://raw.githubusercontent.com/ApocalypticDoctor/kklzs/refs/heads/master/template/data.json"
-repo_url = "https://github.com/ApocalypticDoctor/kklzs.git"
+repo_url = "https://codeload.github.com/ApocalypticDoctor/kklzs/zip/refs/heads/master"
 try:
-    version_new = requests.get(version_url, timeout=3).json()["version"]
+    version_new = requests.get(version_url, timeout=5).json()["version"]
 except:
-    version_url = "https://gitee.com/cobic/kklzs/raw/master/template/data.json"
-    repo_url = "https://gitee.com/cobic/kklzs.git"
-    try:
-        version_new = requests.get(version_url, timeout=3).json()["version"]
-    except:
-        version_new = version_now
+    version_new = version_now
 
 def update():
-    local_repo_path = "../temp"  # 临时目录用于存放更新后的代码
+    response = requests.get(repo_url, timeout=10)
+    with zipfile.ZipFile(io.BytesIO(response.content)) as zip_file:
+        for file_info in zip_file.infolist():
+            # 只处理 background 和 template 文件夹及其子文件
+            if file_info.filename.startswith('kklzs-master/background/') or \
+                    file_info.filename.startswith('kklzs-master/template/'):
+                # 去掉最外层的 kklzs-master/
+                target_path = os.path.join('../', os.path.relpath(file_info.filename, 'kklzs-master'))
 
-    # 删除旧的临时目录（如果存在）
-    if os.path.exists(local_repo_path):
-        os.system("rd /s /q ..\\temp")
-
-    Repo.clone_from(repo_url, local_repo_path, depth=1)
-    # # 遍历更新目录中的文件，复制到项目根目录
-    for item in os.listdir(local_repo_path):
-        src_path = os.path.join(local_repo_path, item)
-        dst_path = os.path.join("../", item)
-
-        # 如果目标是目录，则递归删除再复制
-        if os.path.isdir(src_path):
-            if os.path.exists(dst_path):
-                shutil.rmtree(dst_path)
-            shutil.copytree(src_path, dst_path)
-        else:
-            # 如果是文件则直接覆盖
-            if os.path.exists(dst_path):
-                os.remove(dst_path)
-            shutil.copy2(src_path, dst_path)
-    os.system("rd /s /q ..\\temp")  # 清理临时目录
+                if file_info.is_dir():
+                    os.makedirs(target_path, exist_ok=True)
+                else:
+                    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                    with open(target_path, 'wb') as f:
+                        f.write(zip_file.read(file_info.filename))
     sys.exit(0)

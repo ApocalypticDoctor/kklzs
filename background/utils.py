@@ -27,9 +27,10 @@ from everyday import everyday
 
 index = 0  # 实际索引
 keyflag = False  # 梦魇复刷往前跑
+active = "dev"
 mutex = threading.Lock()
 die = []
-x, y = (0, 46)
+x, y = (0, 45)
 pool = concurrent.futures.ThreadPoolExecutor(max_workers=8)
 fightDict = {
     "a": control.fight_click,
@@ -170,35 +171,35 @@ bossDict = {
     "荣耀狮像": 4
 }
 
-booPoint = {
-    "鸣钟之龟": 799,
-    "无妄者": 878,
-    "角": 838,
-    "赫卡忒": 813,
-    "芙露德莉斯": 851,
-    "朔雷之鳞": 799,
-    "燎照之骑": 799,
-    "无常凶鹭": 799,
-    "辉萤军势": 799,
-    "飞廉之猩": 799,
-    "哀声鸷": 799,
-    "无冠者": 799,
-    "聚械机偶": 865,
-    "云闪之鳞": 799,
-    "无归的谬误": 773,
-    "罗蕾莱": 813,
-    "异构武装": 799,
-    "叹息古龙": 799,
-    "梦魇飞廉之猩": 758,
-    "梦魇无常凶鹭": 758,
-    "梦魇云闪之鳞": 758,
-    "梦魇朔雷之鳞": 758,
-    "梦魇无冠者": 773,
-    "梦魇燎照之骑": 758,
-    "梦魇哀声鸷": 773,
-    "梦魇辉萤军势": 758,
-    "梦魇凯尔匹": 773,
-    "荣耀狮像": 799
+bossPoint = {
+    "鸣钟之龟": 829,   # xxxx · xxxx
+    "无妄者": 877,    # xxx
+    "角": 838,    # * · ****
+    "赫卡忒": 812,    # *** · ****
+    "芙露德莉斯": 851,    # *****
+    "朔雷之鳞": 829,
+    "燎照之骑": 829,
+    "无常凶鹭": 829,
+    "辉萤军势": 829,
+    "飞廉之猩": 829,
+    "哀声鸷": 812,
+    "无冠者": 829,    # *** · *****
+    "聚械机偶": 864,    # ****
+    "云闪之鳞": 829,
+    "无归的谬误": 877,    # ***** · *****
+    "罗蕾莱": 812,
+    "异构武装": 829,
+    "叹息古龙": 829,
+    "梦魇飞廉之猩": 891,    # ** · **** · ****
+    "梦魇无常凶鹭": 891,
+    "梦魇云闪之鳞": 891,
+    "梦魇朔雷之鳞": 891,
+    "梦魇无冠者": 904,    # ** · *** · ****
+    "梦魇燎照之骑": 891,
+    "梦魇哀声鸷": 904,
+    "梦魇辉萤军势": 891,
+    "梦魇凯尔匹": 904,
+    "荣耀狮像": 829
 }
 
 def transfer_to_boss():
@@ -329,7 +330,8 @@ def over_fight():
         mutex.acquire()
         if not t:
             t = time.time()
-        img = screenshot(1)
+        mutex.release()
+        img = screenshot()
         if len(die) == 3:
             info.fighttype = ""
             info.overflag = True
@@ -396,8 +398,6 @@ def over_fight():
     except Exception as e:
         logger(str(e) + " over_fight")
         pass
-    finally:
-        mutex.release()
 
 
 def repeat_boss():
@@ -522,7 +522,7 @@ def transfer():
         return
 
     control.tap(win32con.VK_F2)
-    time.sleep(0.5)
+    time.sleep(0.8)
     if info.bossIndex == -1:
         if not find_pic(46, 411, 110, 475, "强者之路.png", 0.6):
             tempy = 140
@@ -562,7 +562,7 @@ def transfer():
     info.waitBoss = True
     info.bossIndex += 1
     info.bossName = config.TargetBoss[info.bossIndex % len(config.TargetBoss)]
-    x = booPoint.get(info.bossName)
+    x = bossPoint.get(info.bossName)
     logger(f"当前目标boss: {info.bossName}")
     if info.bossName == "":
         return transfer_to_dreamless()
@@ -610,6 +610,7 @@ def jinru(flag=True, num=0):
 
 
 def screenshot(flag=0) -> np.ndarray | None:
+    mutex.acquire()
     hwndDC = win32gui.GetWindowDC(hwnd)  # 获取窗口设备上下文（DC）
     mfcDC = win32ui.CreateDCFromHandle(hwndDC)  # 创建MFC DC从hwndDC
     saveDC = mfcDC.CreateCompatibleDC()  # 创建与mfcDC兼容的DC
@@ -627,6 +628,7 @@ def screenshot(flag=0) -> np.ndarray | None:
             del hwndDC, mfcDC, saveDC, saveBitMap
         except Exception as e:
             logger(f"1清理截图资源失败: {e}")
+        mutex.release()
         time.sleep(3)
         return screenshot()  # 如果截取失败，则重试
     bmp_info = saveBitMap.GetInfo()  # 获取位图信息
@@ -647,6 +649,7 @@ def screenshot(flag=0) -> np.ndarray | None:
     except Exception as e:
         info.fighttype = ""
         logger(f"2清理截图资源失败: {e}")
+    mutex.release()
     return im  # 返回截取到的图像
 
 
@@ -970,26 +973,28 @@ def is_lock():
 def add_echo_list(img):
     def shibie(tz):
         tzlist = []
-        # temp = cv2.imdecode(np.fromfile(f"{root_path}/template/{tz}/0.png", dtype=np.uint8), 1)
-        # res = cv2.matchTemplate(img, temp, cv2.TM_CCOEFF_NORMED)
-        # loc = np.where(res >= 0.7)
-        # for pt in zip(*loc[::-1]):
-        #     if not tzlist:
-        #         tzlist.append((pt[0], pt[1] + 24))
-        #         cv2.rectangle(img, pt, (pt[0] + 24, pt[1] + 24), (255, 255, 0), 1)
-        #     else:
-        #         for j in tzlist:
-        #             if abs(j[0] - pt[0]) < 10 and abs(j[1] - pt[1] - 24) < 10:
-        #                 break
-        #             if j == tzlist[-1]:
-        #                 tzlist.append((pt[0], pt[1] + 24))
-        #                 cv2.rectangle(img, pt, (pt[0] + 24, pt[1] + 24), (255, 255, 0), 1)
-        #
-        # if not tzlist:
-        #     return
+        if active == "dev":
+            temp = cv2.imdecode(np.fromfile(f"{root_path}/template/{tz}/0.png", dtype=np.uint8), 1)
+            res = cv2.matchTemplate(img, temp, cv2.TM_CCOEFF_NORMED)
+            loc = np.where(res >= 0.7)
+            for pt in zip(*loc[::-1]):
+                if not tzlist:
+                    tzlist.append((pt[0], pt[1] + 24))
+                    cv2.rectangle(img, pt, (pt[0] + 24, pt[1] + 24), (255, 255, 0), 1)
+                else:
+                    for j in tzlist:
+                        if abs(j[0] - pt[0]) < 10 and abs(j[1] - pt[1] - 24) < 10:
+                            break
+                        if j == tzlist[-1]:
+                            tzlist.append((pt[0], pt[1] + 24))
+                            cv2.rectangle(img, pt, (pt[0] + 24, pt[1] + 24), (255, 255, 0), 1)
+
+            if not tzlist:
+                return
         for j in range(2):
-            # if len(config.EchoLockConfig[tz][f"{j * 2 + 1}COST"]) == 0:
-            #     continue
+            if active == "dev":
+                if len(config.EchoLockConfig[tz][f"{j * 2 + 1}COST"]) == 0:
+                    continue
             path = f"{root_path}/template/{tz}/{j * 2 + 1}C"
             size = get_file_count(path)
             for k in range(size):
@@ -1038,8 +1043,9 @@ def add_echo_list(img):
     echo_mutex = threading.Lock()
     tao = list(config.EchoLockConfig.keys())
     for i in tao:
-        # if len(config.EchoLockConfig[i]["1COST"]) + len(config.EchoLockConfig[i]["3COST"]) == 0:
-        #     continue
+        if active == "dev":
+            if len(config.EchoLockConfig[i]["1COST"]) + len(config.EchoLockConfig[i]["3COST"]) == 0:
+                continue
         thread = threading.Thread(target=shibie, args=(i,))
         thread.start()
         threads.append(thread)

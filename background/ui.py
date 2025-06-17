@@ -1,4 +1,5 @@
 import random
+import time
 
 from PyQt5.QtCore import pyqtSignal
 from pygame import mixer

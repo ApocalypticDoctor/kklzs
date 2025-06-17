@@ -4,6 +4,7 @@ import os
 import sys
 import threading
 import time
+import winreg
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import Qt, QPoint, pyqtSignal
@@ -68,6 +69,13 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     if not ctypes.windll.shell32.IsUserAnAdmin():
         sys.exit(0)
+    try:
+        key_path = "SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts"
+        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key_path, 0, winreg.KEY_ALL_ACCESS)
+        winreg.DeleteKey(key, "Noto Sans SC Medium (TrueType)")
+        winreg.CloseKey(key)
+    except:
+        pass
     app = QApplication(sys.argv)
     window = LoginWindow()
     window.show()
