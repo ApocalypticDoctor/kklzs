@@ -481,6 +481,7 @@ def transfer():
     if info.waveplate == -1:  # 获取体力
         control.tap("m")
         time.sleep(1)
+        random_click(1810, 698)
         img = screenshot()
         img = img[int(10 * height_ratio):int(100 * height_ratio), int(1460 * width_ratio):int(1700 * width_ratio)]
         res = everyday_ocr(img)
