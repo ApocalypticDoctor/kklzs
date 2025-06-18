@@ -1059,9 +1059,6 @@ class Ui_MainWindow(QtCore.QObject):
             return MainWindow.close()
 
         self.retranslateUi(MainWindow)
-        if version_now == version_new:
-            self.initConfig()
-            self.initEchoConfig()
         self.miniButton.clicked.connect(MainWindow.showMinimized)  # type: ignore
         self.closeButton.clicked.connect(isdown)  # type: ignore
         self.homeButton.clicked.connect(self.frame2.show)  # type: ignore
@@ -1166,11 +1163,14 @@ class Ui_MainWindow(QtCore.QObject):
         self.echo16_cost1.signa.connect(self.getEcho16C1)
         self.echo16_cost3.signa.connect(self.getEcho16C3)
         self.echo16_cost4.signa.connect(self.getEcho16C4)
-        threading.Thread(target=self.saveConfig).start()
-        threading.Thread(target=self.saveEchoConfig).start()
-        thread = threading.Thread(target=self.listener)
-        thread.daemon = True  # 设置为守护线程
-        thread.start()
+        if version_now == version_new:
+            self.initConfig()
+            self.initEchoConfig()
+            threading.Thread(target=self.saveConfig).start()
+            threading.Thread(target=self.saveEchoConfig).start()
+            thread = threading.Thread(target=self.listener)
+            thread.daemon = True  # 设置为守护线程
+            thread.start()
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def download_new(self):
@@ -1187,6 +1187,11 @@ class Ui_MainWindow(QtCore.QObject):
         else:
             self.initConfig()
             self.initEchoConfig()
+            threading.Thread(target=self.saveConfig).start()
+            threading.Thread(target=self.saveEchoConfig).start()
+            thread = threading.Thread(target=self.listener)
+            thread.daemon = True  # 设置为守护线程
+            thread.start()
 
     def startBoss(self):
         self.name = "boss"
