@@ -67,8 +67,8 @@ class LoginWindow(QMainWindow):
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()
-    if not ctypes.windll.shell32.IsUserAnAdmin():
-        sys.exit(0)
+    # if not ctypes.windll.shell32.IsUserAnAdmin():
+    #     sys.exit(0)
     app = QApplication(sys.argv)
     window = LoginWindow()
     window.show()

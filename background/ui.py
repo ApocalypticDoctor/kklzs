@@ -1,5 +1,6 @@
 import random
 import subprocess
+import sys
 import time
 
 from PyQt5.QtCore import pyqtSignal
@@ -74,14 +75,17 @@ class OutputRedirector:
 
 
 class Ui_MainWindow(QtCore.QObject):
-    signal = pyqtSignal()
+    signal = pyqtSignal(int)
+    progress_signal = pyqtSignal(int)  # 新增信号，用于更新进度条
     def __init__(self):
         super(Ui_MainWindow, self).__init__()
         self.signal.connect(self.download_new)
+        self.progress_signal.connect(self.update_progress_bar)
         self.name = ""
         self.temp1 = 0
         self.temp2 = 0
         self.temp3 = 0
+        self.up = 0
         self.flag = False
         self.bossList = config.TargetBoss
         self.TargetChallenge = config.TargetChallenge
@@ -1038,6 +1042,23 @@ class Ui_MainWindow(QtCore.QObject):
         self.questionLabel.setTextFormat(QtCore.Qt.AutoText)
         self.questionLabel.setObjectName("questionLabel")
 
+        # 下载进度条
+        self.progressLabel = QtWidgets.QLabel(self.frame7)
+        self.progressLabel.setGeometry(QtCore.QRect(int(30 * screen), int(650 * screen), int(120 * screen), int(20 * screen)))
+        self.progressLabel.setStyleSheet("color: rgb(240, 240, 240)")
+        font = QtGui.QFont()
+        font.setFamily("筑紫A丸")
+        font.setPointSize(int(15 * scale_factor))
+        self.progressLabel.setFont(font)
+        self.progressLabel.setTextFormat(QtCore.Qt.AutoText)
+        self.progressLabel.setObjectName("progressLabel")
+        self.progressBar = QtWidgets.QProgressBar(self.frame7)
+        self.progressBar.setGeometry(QtCore.QRect(int(160 * screen), int(650 * screen), int(700 * screen), int(25 * screen)))
+        self.progressBar.setObjectName("progressBar")
+        self.progressBar.setValue(0)  # 初始值为0
+        self.progressBar.setStyleSheet("color: rgb(240, 240, 240)")
+        self.progressBar.setFont(font)
+
         self.frame7.raise_()
         self.frame6.raise_()
         self.frame5.raise_()
@@ -1052,7 +1073,9 @@ class Ui_MainWindow(QtCore.QObject):
         def isdown():
             if self.flag:
                 msgBox = QMessageBox()
-                msgBox.setWindowTitle("提示")  # 设置窗口标题
+                msgBox.setWindowIcon(QIcon("icon.png"))  # 设置自定义图标
+                msgBox.setIcon(QMessageBox.Information)
+                msgBox.setWindowTitle("?")  # 设置窗口标题
                 msgBox.setText("还没下载完就想走? 哪有这种好事")  # 设置消息内容
                 msgBox.exec_()
                 return
@@ -1166,32 +1189,53 @@ class Ui_MainWindow(QtCore.QObject):
         if version_now == version_new:
             self.initConfig()
             self.initEchoConfig()
-            threading.Thread(target=self.saveConfig).start()
-            threading.Thread(target=self.saveEchoConfig).start()
-            thread = threading.Thread(target=self.listener)
-            thread.daemon = True  # 设置为守护线程
-            thread.start()
+        threading.Thread(target=self.saveConfig).start()
+        threading.Thread(target=self.saveEchoConfig).start()
+        thread = threading.Thread(target=self.listener)
+        thread.daemon = True  # 设置为守护线程
+        thread.start()
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def download_new(self):
-        msg_box = QMessageBox()
-        msg_box.setWindowIcon(QIcon("icon.png"))  # 设置自定义图标
-        msg_box.setIcon(QMessageBox.Information)
-        msg_box.setWindowTitle("发现更新")
-        msg_box.setText(f"发现新版本 {version_new}，是否立即更新?")
-        msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        msg_box.setDefaultButton(QMessageBox.Yes)
-        reply = msg_box.exec_()
-        if reply == QMessageBox.Yes:
-            threading.Thread(target=update).start()
+    def update_progress_bar(self, value):
+        self.progressBar.setValue(value)
+        if value == 100:
+            self.signal.emit(2)
+
+    def download_new(self, value):
+        if value == 1:
+            msg_box = QMessageBox()
+            msg_box.setWindowIcon(QIcon("icon.png"))  # 设置自定义图标
+            msg_box.setIcon(QMessageBox.Information)
+            msg_box.setWindowTitle("发现更新")
+            msg_box.setText(f"发现新版本 {version_new}，是否立即更新?")
+            msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msg_box.setDefaultButton(QMessageBox.Yes)
+            reply = msg_box.exec_()
+            if reply == QMessageBox.Yes:
+                self.up = 1
+                self.frame1.raise_()
+                self.frame2.raise_()
+                self.frame3.raise_()
+                self.frame4.raise_()
+                self.frame5.raise_()
+                self.frame6.raise_()
+                self.frame7.raise_()
+                self.frame0.raise_()
+            else:
+                self.up = 2
+                self.initConfig()
+                self.initEchoConfig()
         else:
-            self.initConfig()
-            self.initEchoConfig()
-            threading.Thread(target=self.saveConfig).start()
-            threading.Thread(target=self.saveEchoConfig).start()
-            thread = threading.Thread(target=self.listener)
-            thread.daemon = True  # 设置为守护线程
-            thread.start()
+            msg_box = QMessageBox()
+            msg_box.setWindowIcon(QIcon("icon.png"))  # 设置自定义图标
+            msg_box.setIcon(QMessageBox.Information)
+            msg_box.setWindowTitle("更新完成")
+            msg_box.setText(f"更新完成,请重新启动")
+            msg_box.setStandardButtons(QMessageBox.Yes)
+            msg_box.setDefaultButton(QMessageBox.Yes)
+            msg_box.exec_()
+            os._exit(0)
+
 
     def startBoss(self):
         self.name = "boss"
@@ -1538,6 +1582,7 @@ class Ui_MainWindow(QtCore.QObject):
         self.shenmiButton.setText(_translate("MainWindow", "神秘按钮"))
         self.echoNum.setText(_translate("MainWindow", '<font color="#f0f0f0">当前声骸<br/>个数: 0</font>'))
         self.label.setText(_translate("MainWindow", "待开发..."))
+        self.progressLabel.setText(_translate("MainWindow", "更新进度条: "))
         self.questionLabel.setText(_translate("MainWindow", "1. 需要管理员模式打开程序才可以正常使用, 初始化时不要关闭\n"
                                                             "2. 游戏窗口必须为16:9, 推荐为1280*720, 镜头重置必须打开\n"
                                                             "3. 先写配置再启动, 合成需要进入合成界面, 其他在大世界\n"
@@ -1655,15 +1700,18 @@ class Ui_MainWindow(QtCore.QObject):
                 self.temp3 = 1
 
     def saveConfig(self):
-        flag = 1
         basicConfig = {}
         while True:
             try:
                 time.sleep(1)
                 self.path.text()
-                if version_now != version_new and flag:
-                    self.signal.emit()
-                    flag = 0
+                if version_now != version_new and self.up == 0:
+                    self.signal.emit(1)
+                    while not self.up:
+                        pass
+                    if self.up == 1:
+                        update(self.progress_signal.emit)
+                        return
                 if self.radioButton1.isChecked():
                     Iswei = True
                 else:
