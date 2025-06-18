@@ -1,27 +1,6 @@
-也可以直接去下载一个python 然后直接做最后两步
+下载python(https://share.weiyun.com/JDP4JDiQ)
+安装时一定要添加环境变量
 
-
-安装好Miniconda3后 用管理员打开power shell
-如果出现了 加载个人及系统配置文件用了 xxx毫秒 运行以下代码
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
-conda config --set show_channel_urls yes
-
-如果没有出现 cd到你miniconda安装路径下的condabin目录 运行
-set-executionpolicy remotesigned 选a 然后重启仍然cd到condabin目录运行
- ./conda init
- 然后再运行上面 下面的
-
-所有询问都按y
-conda create -n kkl python=3.10.11
-conda activate kkl
-cd到kklzs目录运行
+再cd到项目目录运行这两行
 pip install paddlepaddle==2.5.2 -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple 
-
-
-
-以下不必在意
-conda env remove --name kkl
-Remove-Item (Get-PSReadlineOption).HistorySavePath
--i https://mirrors.aliyun.com/pypi/simple/
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple

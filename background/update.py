@@ -1,7 +1,6 @@
 import io
 import json
 import os
-import time
 import zipfile
 
 import requests
@@ -27,7 +26,7 @@ def update(progress_callback):
     last = 0
     with (zipfile.ZipFile(io.BytesIO(response.content)) as zip_file):
         for file_info in zip_file.infolist():
-            if (file_info.filename.startswith('kklzs-master/background/') or \
+            if (file_info.filename.startswith('kklzs-master/background/') or
                 file_info.filename.startswith('kklzs-master/template/')) and \
                 not file_info.filename.endswith('.exe') and not file_info.filename.endswith('.ttf'):
 
