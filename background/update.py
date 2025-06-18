@@ -31,7 +31,7 @@ def update(progress_callback):
                 file_info.filename.startswith('kklzs-master/template/')) and \
                 not file_info.filename.endswith('.exe') and not file_info.filename.endswith('.ttf'):
 
-                target_path = os.path.join('../temp', os.path.relpath(file_info.filename, 'kklzs-master'))
+                target_path = os.path.join('../', os.path.relpath(file_info.filename, 'kklzs-master'))
 
                 if file_info.is_dir():
                     os.makedirs(target_path, exist_ok=True)
