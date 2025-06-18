@@ -231,7 +231,10 @@ def transfer_to_boss():
     logger("传送完成", flag=False)
     if info.bossName in ["无妄者", "角", "赫卡忒"]:
         forward(0.8)
-    elif info.bossName != "芙露德莉斯":
+        jinru()
+    elif info.bossName in ["芙露德莉斯"]:
+        jinru()
+    else:
         move_boss()
     info.lastFightTime = datetime.now()  # 重置最近检测到战斗时间
 
@@ -404,6 +407,8 @@ def repeat_boss():
     control.tap("m")
     time.sleep(1)
     random_click(960, 540)  # 中心
+    random_click(960, 540)  # 中心
+    time.sleep(0.3)
     random_click(1750, 1000)  # 快速旅行
     random_click(1750, 1000)  # 快速旅行
     time.sleep(2)
@@ -417,7 +422,7 @@ def repeat_boss():
             forward(1, "d")
         while True:
             forward(0.7)
-            img = screenshot()
+            img = screenshot(1)
             img = img[int(420 * height_ratio):int(630 * height_ratio), int(1335 * width_ratio):int(1470 * width_ratio)]
             result = ocr(img)
             if result:

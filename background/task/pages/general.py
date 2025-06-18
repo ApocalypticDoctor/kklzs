@@ -12,7 +12,9 @@ def fight_action(positions: dict[str, Position]) -> bool:
     info.overflag = False
     info.fighttype = "boss"
     release_skills()
-    if info.bossName not in ["无妄者", "角", "赫卡忒", "芙露德莉斯"]:
+    if info.bossName in ["无妄者", "角", "赫卡忒", "芙露德莉斯"]:
+        leave_action(None)
+    else:
         absorption_action()
     info.lastFightTime = datetime.now()
     return True

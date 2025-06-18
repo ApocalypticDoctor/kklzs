@@ -19,7 +19,7 @@ class ComboCheckBox(QComboBox):
         super(ComboCheckBox, self).__init__(frame)
         self.items = items
         font = QtGui.QFont()
-        font.setFamily("Noto Sans SC")
+        font.setFamily("筑紫A丸")
         font.setPointSize(int(12 * scale_factor))
         self.setFont(font)
         self.row_num = len(self.items)
@@ -31,7 +31,7 @@ class ComboCheckBox(QComboBox):
         self.qLineEdit.setStyleSheet("background-color: rgb(240,240,240)")
         self.qListWidget = CustomListWidget(self)
         font = QtGui.QFont()
-        font.setFamily("Noto Sans SC")
+        font.setFamily("筑紫A丸")
         font.setPointSize(int(15 * scale_factor))
         self.qListWidget.setFont(font)
         self.qListWidget.setStyleSheet("QListWidget{background-color: rgb(240,240,240)}")
