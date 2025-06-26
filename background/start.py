@@ -1,3 +1,4 @@
+import cv2
 from win32gui import FindWindow, SendMessage
 from os import environ
 
@@ -122,7 +123,7 @@ def getPrint():
 
 
 def start(name):
-    global mouse_reset_thread, thread, taskEvent, queue, flag
+    global mouse_reset_thread, thread, flag
     if os.path.exists(os.path.join(root_path, "mc_log.txt")):
         if int(time.time()) - int(os.path.getctime(os.path.join(root_path, "mc_log.txt"))) >= 86400:
             os.remove(os.path.join(root_path, "mc_log.txt"))

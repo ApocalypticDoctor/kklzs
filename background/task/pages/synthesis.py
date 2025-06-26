@@ -60,6 +60,7 @@ def all(positions: dict[str, Position]) -> bool:
     control.activate()
     random_click(550, 990)
     random_click(1510, 990)
+    time.sleep(0.2)
     return True
 
 

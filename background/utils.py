@@ -944,7 +944,6 @@ def lock_echo_synthesis(echo_cost, echo_main_status, echo_set):
     return False
 
 
-temptao = None
 def is_lock():
     global temptao
     image = screenshot()
@@ -975,7 +974,6 @@ def is_lock():
         logger(log + " 锁定", "绿", flag=False)
     else:
         logger(log + " 不锁定", "红", flag=False)
-    temptao = this_echo_set
     control.esc()
     time.sleep(0.2)
 
@@ -1088,6 +1086,7 @@ def echo_synthesis():
     for i in range(len(click_list)):
         click_x, click_y = click_list[i]
         random_click(click_x, click_y)  # 点开声骸
+        time.sleep(0.2)
         is_lock()
 
     if freegain:
@@ -1110,6 +1109,7 @@ def echo_synthesis():
         for i in range(len(click_list)):
             click_x, click_y = click_list[i]
             random_click(click_x, click_y + y)  # 点开声骸
+            time.sleep(0.2)
             is_lock()
     time.sleep(0.2)
     control.esc()
