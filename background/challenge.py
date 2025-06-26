@@ -3,7 +3,7 @@ import time
 import cv2
 import win32con
 
-from yolo import search_echoes
+#from yolo import search_echoes
 from ocr import everyday_ocr
 from constant import width_ratio, height_ratio
 from status import logger, info
@@ -26,7 +26,7 @@ def reset():
 def challenge(sum, tempy):
     global xiaohao, addy
     name = config.TargetChallenge
-    bossName = info.bossName
+    info.bossName = ""
     logger("当前副本为:" + name + "本", "蓝")
     while xiaohao < sum:
         control.activate()
@@ -89,26 +89,27 @@ def challenge(sum, tempy):
         time.sleep(0.3)
 
         if name in ["角色", "武器", "贝币", "迅刀", "音感仪", "长刃", "拳套", "枪"]:
-            for i in range(4):
-                img = screenshot()
-                x = search_echoes(img)
-                if x is not None:
-                    break
-                control.tap("a")
-                time.sleep(0.3)
-                control.mouse_middle()
-                time.sleep(0.4)
-            while True:
-                if gain(name):
-                    break
-                img = screenshot()
-                x = search_echoes(img)  # 领取奖励在屏幕上的x
-                if x is None or x < 910 * width_ratio:
-                    turn_forward("a")
-                elif x > 1010 * width_ratio:
-                    turn_forward("d")
-                else:
-                    break
+            pass
+            # for i in range(4):
+            #     img = screenshot()
+            #     x = search_echoes(img)
+            #     if x is not None:
+            #         break
+            #     control.tap("a")
+            #     time.sleep(0.3)
+            #     control.mouse_middle()
+            #     time.sleep(0.4)
+            # while True:
+            #     if gain(name):
+            #         break
+            #     img = screenshot()
+            #     x = search_echoes(img)  # 领取奖励在屏幕上的x
+            #     if x is None or x < 910 * width_ratio:
+            #         turn_forward("a")
+            #     elif x > 1010 * width_ratio:
+            #         turn_forward("d")
+            #     else:
+            #         break
         else:
             time.sleep(3)
         a = time.time()
@@ -124,7 +125,6 @@ def challenge(sum, tempy):
             time.sleep(0.2)
 
     logger("体力已经清理完毕", "绿")
-    info.bossName = bossName
     if name == "无音区":
         random_click(960, 920)  # 退出
         random_click(960, 920)  # 退出

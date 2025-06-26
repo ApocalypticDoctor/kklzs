@@ -71,10 +71,8 @@ class Control:
             key = ord(key.upper())
         win32gui.PostMessage(self.hwnd, win32con.WM_KEYUP, key, 0)
 
-    def activate(self, flag=True):
+    def activate(self):
         win32gui.PostMessage(self.hwnd, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
-        if flag:
-            time.sleep(0.2)
 
     def inactivate(self):
         win32gui.PostMessage(self.hwnd, win32con.WM_ACTIVATE, win32con.WA_INACTIVE, 0)

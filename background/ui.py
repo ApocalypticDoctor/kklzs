@@ -47,7 +47,7 @@ class OutputRedirector:
             self.over()
         if "体力已经清理完毕" in text and self.TargetChallenge == "无音区":
             num = 0
-        if "当前个数为" in text and not num:
+        if "当前个数为" in text:
             num = int(text[text.index("当前个数为") + 5:-1])
             self.echoNum.setText(f'<font color="{get_color(num / 3000)}">当前声骸<br/>个数: {num}</font>')
         if "吸收声骸" in text:

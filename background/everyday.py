@@ -32,5 +32,5 @@ def everyday():
             info.echoNum += 1
             logger("每日任务已经做完", "绿")
             info.everyday = True
-            time.sleep(0.5)
+            time.sleep(2)
             return

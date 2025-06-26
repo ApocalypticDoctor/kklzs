@@ -38,7 +38,7 @@ def restart_app():
             if FindWindow("UnrealWindow", "鸣潮  "):
                 if thread.exitcode == 0:
                     if thread.name in ["合成", "锁定"]:
-                        logger("自动启动BOSS脚本", )
+                        logger("自动启动BOSS脚本")
                         thread = Process(target=run, args=(boss_task, taskEvent, queue, True), name="boss")
                         thread.start()
                     elif thread.name == "boss":

@@ -39,7 +39,7 @@ fightDict = {
 }
 
 def get_file_count(folder_path):
-    file_list = glob.glob(folder_path + '/*')
+    file_list = glob.glob(folder_path + "/*")
     return len(file_list)
 
 
@@ -86,7 +86,9 @@ def fight(tactics, flag):
         if info.overflag:
             return True  # 提前结束
         #  判断 flag 状态，若为真，则执行一些操作
-        control.activate(False)
+        if index in die:
+            return False
+        control.activate()
         control.tap(index)
         control.mouse_middle()
         try:
@@ -96,8 +98,6 @@ def fight(tactics, flag):
             if tactic in ["e", "t", "q"]:
                 if info.overflag:
                     return True  # 提前结束
-                if tactic in die:
-                    return False
                 control.tap(tactic)
                 pool.submit(over_fight)
             elif tactic == "r" and flag:  # 大招处理
@@ -125,7 +125,7 @@ def fight(tactics, flag):
                 control.zhongji()
                 pool.submit(over_fight)
             else:
-                continuous_tap_time = float(tactic[tactic.find('(') + 1:tactic.find(')')])
+                continuous_tap_time = float(tactic[tactic.find("(") + 1:tactic.find(")")])
                 tap_start_time = time.time()
                 while time.time() - tap_start_time <= continuous_tap_time:
                     if info.overflag:
@@ -172,8 +172,8 @@ bossDict = {
 }
 
 bossPoint = {
-    "鸣钟之龟": 829,   # xxxx · xxxx
-    "无妄者": 877,    # xxx
+    "鸣钟之龟": 829,   # **** · ****
+    "无妄者": 877,    # ***
     "角": 838,    # * · ****
     "赫卡忒": 812,    # *** · ****
     "芙露德莉斯": 851,    # *****
@@ -361,13 +361,13 @@ def over_fight():
                     info.fighttype = ""
                     info.overflag = True
                     t = None
-                if (img[int(289 * height_ratio), int(1758 * width_ratio)] < [150, 150, 150]).all() and "1" not in die: # 1号位死
+                if (img[int(289 * height_ratio), int(1755 * width_ratio)] < [150, 150, 150]).all() and "1" not in die: # 1号位死
                     die.append("1")
                     logger("1号位死了", "红")
-                elif (img[int(421 * height_ratio), int(1758 * width_ratio)] < [150, 150, 150]).all() and "2" not in die: # 2号位死
+                elif (img[int(421 * height_ratio), int(1755 * width_ratio)] < [150, 150, 150]).all() and "2" not in die: # 2号位死
                     die.append("2")
                     logger("2号位死了", "红")
-                elif (img[int(553 * height_ratio), int(1758 * width_ratio)] < [150, 150, 150]).all() and "3" not in die: # 3号位死
+                elif (img[int(553 * height_ratio), int(1755 * width_ratio)] < [150, 150, 150]).all() and "3" not in die: # 3号位死
                     die.append("3")
                     logger("3号位死了", "红")
             if info.bossName == "赫卡忒" and ((img[int(43 * height_ratio), int(1740 * width_ratio)] < [5, 5, 5]).all() and (img[int(61 * height_ratio), int(678 * width_ratio)] < [5, 5, 5]).all()):
@@ -388,7 +388,7 @@ def over_fight():
             res2 = ocr(img2)
             if res2 and res2[0].text == "交替点击进行挣脱":
                 b = time.time()
-                while time.time() - b < 2:
+                while time.time() - b < 3:
                     control.tap("a")
                     control.tap("d")
         if info.fighttype == "每日":
@@ -422,9 +422,9 @@ def repeat_boss():
             forward(1, "d")
         while True:
             forward(0.7)
-            img = screenshot(1)
-            img = img[int(420 * height_ratio):int(630 * height_ratio), int(1335 * width_ratio):int(1470 * width_ratio)]
-            result = ocr(img)
+            img = screenshot()
+            img1 = img[int(420 * height_ratio):int(630 * height_ratio), int(1335 * width_ratio):int(1470 * width_ratio)]
+            result = ocr(img1)
             if result:
                 if len(result) == 3:
                     control.tap("2")
@@ -438,10 +438,11 @@ def repeat_boss():
                     info.absorptionCount += 1
                     info.echoNum += 1
                     logger("吸收声骸", "绿")
+                elif len(result) == 2:
+                    control.scroll(1)
                 elif len(result) == 1:
                     control.tap("f")
                     continue
-                control.scroll(1)
                 control.tap("f")
                 time.sleep(1)
                 break
@@ -466,6 +467,8 @@ def transfer():
     global recovery, tempy, keyflag, x
     keyflag = False
     control.activate()
+    time.sleep(0.2)
+    control.activate()
 
     a = int(86400 - (time.time() - datetime(2025, 3, 3, 4, 0, 0).timestamp()) % 86400)
     if a < 20:
@@ -481,7 +484,6 @@ def transfer():
     if info.waveplate == -1:  # 获取体力
         control.tap("m")
         time.sleep(1)
-        random_click(1810, 698)
         img = screenshot()
         img = img[int(10 * height_ratio):int(100 * height_ratio), int(1460 * width_ratio):int(1700 * width_ratio)]
         res = everyday_ocr(img)
@@ -729,7 +731,7 @@ def absorption_action():
     if info.bossName in ["梦魇哀声鸷"]:
         count = 3
     else:
-        count = 7
+        count = 5
     for _ in range(count):
         forward(0.7)
         if absorption_and_receive_rewards():
@@ -747,7 +749,7 @@ def absorption_and_receive_rewards() -> bool:
     result = ocr(img)
     if result:
         time.sleep(0.1)
-        img = screenshot()
+        img = screenshot(1)
         img = img[int(420 * height_ratio):int(630 * height_ratio), int(1335 * width_ratio):int(1470 * width_ratio)]
         result = ocr(img)
         if result:
@@ -772,6 +774,8 @@ def absorption_and_receive_rewards() -> bool:
                     control.tap("1")
                     if result[0].text == "吸收":
                         control.scroll(1)
+                if "米" in result[0].text:
+                    return False
             control.tap("f")
             time.sleep(1)
             info.absorptionCount += 1
