@@ -1,4 +1,3 @@
-import cv2
 from win32gui import FindWindow, SendMessage
 from os import environ
 

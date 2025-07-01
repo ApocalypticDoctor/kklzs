@@ -47,12 +47,18 @@ def release_skills():
     global index, keyflag
     control.activate()
     if keyflag and info.bossName in ["梦魇无冠者", "梦魇燎照之骑"]:
+        control.mouse_middle()
         control.key_press("w")
         time.sleep(0.2)
+        control.mouse_middle()
         control.shift()
+        control.mouse_middle()
         time.sleep(0.2)
+        control.mouse_middle()
         control.shift()
+        control.mouse_middle()
         time.sleep(0.2)
+        control.mouse_middle()
         control.key_release("w")
     keyflag = True
     if info.waitBoss:
@@ -88,9 +94,9 @@ def fight(tactics, flag):
         #  判断 flag 状态，若为真，则执行一些操作
         if index in die:
             return False
-        control.activate()
         control.tap(index)
         control.mouse_middle()
+        pool.submit(over_fight)
         try:
             wait_time = float(tactic)
             time.sleep(wait_time)
@@ -99,7 +105,6 @@ def fight(tactics, flag):
                 if info.overflag:
                     return True  # 提前结束
                 control.tap(tactic)
-                pool.submit(over_fight)
             elif tactic == "r" and flag:  # 大招处理
                 if info.overflag:
                     return True  # 提前结束
@@ -107,7 +112,7 @@ def fight(tactics, flag):
                 time.sleep(0.1)
                 img = screenshot()
                 if (img[int(43 * height_ratio), int(1740 * width_ratio)] < [255, 255, 255]).all():  # 等待大招时间
-                    logger("检测到大招释放，等待大招动画", flag=False)
+                    logger("检测到大招释放, 等待大招动画", flag=False)
                     while True:
                         img = screenshot()
                         if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 等待大招时间
@@ -118,12 +123,10 @@ def fight(tactics, flag):
                 if info.overflag:
                     return True  # 提前结束
                 fightDict.get(tactic)()
-                pool.submit(over_fight)
             elif tactic == "z":
                 if info.overflag:
                     return True  # 提前结束
                 control.zhongji()
-                pool.submit(over_fight)
             else:
                 continuous_tap_time = float(tactic[tactic.find("(") + 1:tactic.find(")")])
                 tap_start_time = time.time()
@@ -134,7 +137,6 @@ def fight(tactics, flag):
                         control.fight_click()
                     else:
                         control.tap(tactic[0])
-                    pool.submit(over_fight)
     return False  # 所有策略执行完后返回
 
 
@@ -145,30 +147,30 @@ def forward(cxk: float, f: str = "w"):
 
 
 bossDict = {
-    "鸣钟之龟": 4,
-    "朔雷之鳞": 1,
-    "燎照之骑": 3,
-    "无常凶鹭": 4,
-    "辉萤军势": 3,
-    "飞廉之猩": 5,
-    "哀声鸷": 5,
-    "无冠者": 4,
-    "聚械机偶": 7,
-    "云闪之鳞": 3,
-    "无归的谬误": 6,
-    "罗蕾莱": 5,
-    "异构武装": 4,
-    "叹息古龙": 5,
+    "鸣钟之龟": 3,
+    "朔雷之鳞": 0,
+    "燎照之骑": 2,
+    "无常凶鹭": 3,
+    "辉萤军势": 2,
+    "飞廉之猩": 4,
+    "哀声鸷": 4,
+    "无冠者": 3,
+    "聚械机偶": 6,
+    "云闪之鳞": 2,
+    "无归的谬误": 5,
+    "罗蕾莱": 4,
+    "异构武装": 3,
+    "叹息古龙": 4,
     "梦魇飞廉之猩": 0,
-    "梦魇无常凶鹭": 5,
-    "梦魇云闪之鳞": 3,
-    "梦魇朔雷之鳞": 3,
-    "梦魇无冠者": 3,
-    "梦魇燎照之骑": 4,
-    "梦魇哀声鸷": 5,
-    "梦魇辉萤军势": 2,
-    "梦魇凯尔匹": 6,
-    "荣耀狮像": 4
+    "梦魇无常凶鹭": 4,
+    "梦魇云闪之鳞": 2,
+    "梦魇朔雷之鳞": 2,
+    "梦魇无冠者": 2,
+    "梦魇燎照之骑": 3,
+    "梦魇哀声鸷": 4,
+    "梦魇辉萤军势": 1,
+    "梦魇凯尔匹": 5,
+    "荣耀狮像": 3
 }
 
 bossPoint = {
@@ -216,6 +218,7 @@ def transfer_to_boss():
     if not findBoss:
         control.esc()
         logger("未找到目标boss", "红")
+        info.bossName = ""
         time.sleep(1)
         return False
     x = (findBoss.position.x1 + findBoss.position.x2) // 2
@@ -242,25 +245,27 @@ def transfer_to_boss():
 def move_boss(flag=True):
     if info.bossName not in ["梦魇辉萤军势", "梦魇云闪之鳞"]:
         control.mouse_middle()
-    if info.bossName == "罗蕾莱" and not find_text(20, 265, 320, 310, "击败") and flag:
-        control.esc()
-        time.sleep(0.8)
-        random_click(1370, 1035)
+    if info.bossName == "罗蕾莱":
         time.sleep(0.5)
-        random_click(370, 145)
-        random_click(1765, 550)
-        random_click(1765, 550)
-        random_click(960, 1000)
-        time.sleep(5)
-        for i in range(2):
+        if find_text(20, 265, 320, 310, "击败") and flag:
             control.esc()
-            time.sleep(1)
+            time.sleep(0.8)
+            random_click(1370, 1035)
+            time.sleep(0.5)
+            random_click(370, 145)
+            random_click(1765, 550)
+            random_click(1765, 550)
+            random_click(960, 1000)
+            time.sleep(5)
+            for i in range(2):
+                control.esc()
+                time.sleep(1)
     num = bossDict.get(info.bossName)
     if num:
         control.key_press("w")
         for i in range(num):
             control.shift()
-            time.sleep(0.5)
+            time.sleep(0.8)
             if info.bossName == "聚械机偶" and i == 4:
                 control.space()
                 time.sleep(1)
@@ -271,7 +276,7 @@ def move_boss(flag=True):
         if info.bossName == "梦魇朔雷之鳞":
             forward(0.8)
         else:
-            forward(1.3)
+            forward(2)
     if info.bossName == "无冠者":
         control.tap("f")
         time.sleep(1)
@@ -448,6 +453,7 @@ def repeat_boss():
                 break
         time.sleep(1)
         if info.bossName == "罗蕾莱":
+            time.sleep(0.5)
             if not find_text(20, 265, 320, 310, "击败"):
                 control.esc()
                 time.sleep(0.8)
@@ -467,7 +473,6 @@ def transfer():
     global recovery, tempy, keyflag, x
     keyflag = False
     control.activate()
-    time.sleep(0.2)
     control.activate()
 
     a = int(86400 - (time.time() - datetime(2025, 3, 3, 4, 0, 0).timestamp()) % 86400)
@@ -484,6 +489,7 @@ def transfer():
     if info.waveplate == -1:  # 获取体力
         control.tap("m")
         time.sleep(1)
+        random_click(1810, 640)
         img = screenshot()
         img = img[int(10 * height_ratio):int(100 * height_ratio), int(1460 * width_ratio):int(1700 * width_ratio)]
         res = everyday_ocr(img)
@@ -795,6 +801,7 @@ def revive():
     random_click(77, 315 + tempy)  # 周期挑战
     random_click(77, 315 + tempy)  # 周期挑战
     time.sleep(0.3)
+    random_click(1810, 451)
     random_click(1700, 275)  # 复活
     time.sleep(0.8)
     random_click(815, 690)
@@ -984,7 +991,7 @@ def add_echo_list(img):
         if active == "dev":
             temp = cv2.imdecode(np.fromfile(f"{root_path}/template/{tz}/0.png", dtype=np.uint8), 1)
             res = cv2.matchTemplate(img, temp, cv2.TM_CCOEFF_NORMED)
-            loc = np.where(res >= 0.7)
+            loc = np.where(res >= 0.65)
             for pt in zip(*loc[::-1]):
                 if not tzlist:
                     tzlist.append((pt[0], pt[1] + 24))
@@ -1016,14 +1023,14 @@ def add_echo_list(img):
                                 echo_mutex.acquire()
                                 click_list.append((pt[0] + 30, pt[1] + 30))
                                 tzlist.remove(i)
-                                # cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
+                                cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
                                 echo_mutex.release()
                                 if not tzlist:
                                     return
                         if not tzlist:
                             echo_mutex.acquire()
                             click_list.append((pt[0] + 30, pt[1] + 30))
-                            # cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
+                            cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
                             echo_mutex.release()
                     else:
                         for j in click_list:
@@ -1035,14 +1042,14 @@ def add_echo_list(img):
                                         echo_mutex.acquire()
                                         click_list.append((pt[0] + 30, pt[1] + 30))
                                         tzlist.remove(i)
-                                        # cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
+                                        cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
                                         echo_mutex.release()
                                         if not tzlist:
                                             return
                                 if not tzlist:
                                     echo_mutex.acquire()
                                     click_list.append((pt[0] + 30, pt[1] + 30))
-                                    # cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
+                                    cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
                                     echo_mutex.release()
 
     logger("正在识别声骸...", "蓝", False)
@@ -1086,7 +1093,6 @@ def echo_synthesis():
     for i in range(len(click_list)):
         click_x, click_y = click_list[i]
         random_click(click_x, click_y)  # 点开声骸
-        time.sleep(0.2)
         is_lock()
 
     if freegain:
@@ -1109,7 +1115,6 @@ def echo_synthesis():
         for i in range(len(click_list)):
             click_x, click_y = click_list[i]
             random_click(click_x, click_y + y)  # 点开声骸
-            time.sleep(0.2)
             is_lock()
     time.sleep(0.2)
     control.esc()

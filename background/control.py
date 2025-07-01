@@ -19,7 +19,7 @@ class Control:
 
     def click(self, x: int | float = 0, y: int | float = 0):
         self.fight_click(x, y)
-        time.sleep(0.2)
+        time.sleep(0.4)
 
     def mouse_middle(self, x: int = 0, y: int = 0):
         x = x if isinstance(x, int) else int(x)
@@ -54,7 +54,7 @@ class Control:
         if isinstance(key, str):
             key = ord(key.upper())
         win32gui.PostMessage(self.hwnd, win32con.WM_KEYDOWN, key, 0)
-        time.sleep(0.04)
+        time.sleep(0.05)
         win32gui.PostMessage(self.hwnd, win32con.WM_KEYUP, key, 0)
 
     def esc(self):
@@ -79,7 +79,6 @@ class Control:
 
     def space(self):
         win32gui.PostMessage(self.hwnd, win32con.WM_KEYDOWN, win32con.VK_SPACE, 0)
-        win32gui.PostMessage(self.hwnd, win32con.WM_KEYUP, win32con.VK_SPACE, 0)
 
     def shift(self):
         long_position = win32api.MAKELONG(0, 0)
