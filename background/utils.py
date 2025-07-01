@@ -991,7 +991,7 @@ def add_echo_list(img):
         if active == "dev":
             temp = cv2.imdecode(np.fromfile(f"{root_path}/template/{tz}/0.png", dtype=np.uint8), 1)
             res = cv2.matchTemplate(img, temp, cv2.TM_CCOEFF_NORMED)
-            loc = np.where(res >= 0.65)
+            loc = np.where(res >= 0.5)
             for pt in zip(*loc[::-1]):
                 if not tzlist:
                     tzlist.append((pt[0], pt[1] + 24))
