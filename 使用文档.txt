@@ -1,6 +1,6 @@
 下载python(https://share.weiyun.com/JDP4JDiQ)
 安装时一定要添加环境变量
 
-再cd到项目目录运行这两行
+再cd到项目目录(在background文件夹输入cmd)运行这两行
 pip install paddlepaddle==2.5.2 -i https://pypi.tuna.tsinghua.edu.cn/simple
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
