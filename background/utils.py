@@ -84,10 +84,10 @@ def release_skills_after_ult():
 
 
 def fight(tactics, flag):
-    # while True:
-    #     img = screenshot()
-    #     if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 没开大招
-    #         break
+    while True:
+        img = screenshot()
+        if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 没开大招
+            break
     for tactic in tactics:  # 遍历对应角色的战斗策略
         if info.overflag:
             return True  # 提前结束
@@ -112,7 +112,6 @@ def fight(tactics, flag):
                 time.sleep(0.1)
                 img = screenshot()
                 if (img[int(43 * height_ratio), int(1740 * width_ratio)] < [255, 255, 255]).all():  # 等待大招时间
-                    logger("检测到大招释放, 等待大招动画", flag=False)
                     while True:
                         img = screenshot()
                         if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 等待大招时间
@@ -169,7 +168,7 @@ bossDict = {
     "梦魇燎照之骑": 3,
     "梦魇哀声鸷": 4,
     "梦魇辉萤军势": 1,
-    "梦魇凯尔匹": 5,
+    "梦魇凯尔匹": 4,
     "荣耀狮像": 3
 }
 
@@ -214,7 +213,10 @@ def transfer_to_boss():
         findBoss = find_text(280, 135, 600, 900, info.bossName)
         if findBoss:
             break
-        random_click(855, y)
+        random_x = int(855) * width_ratio
+        random_y = int(y) * height_ratio
+        control.fight_click(random_x, random_y)
+        time.sleep(0.1)
     if not findBoss:
         control.esc()
         logger("未找到目标boss", "红")
@@ -377,18 +379,19 @@ def over_fight():
                     logger("3号位死了", "红")
             if info.bossName == "赫卡忒" and ((img[int(43 * height_ratio), int(1740 * width_ratio)] < [5, 5, 5]).all() and (img[int(61 * height_ratio), int(678 * width_ratio)] < [5, 5, 5]).all()):
                 time.sleep(1)
-        if "梦魇" in info.bossName and t:
-            if time.time() - t > 5 and (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all() and (img[int(63 * height_ratio), int(1244 * width_ratio)] > [200, 200, 200]).any():
-                logger("超出场地", "红")
-                info.fighttype = ""
-                info.overflag = True
-                t = None
-                control.tap("1")
-                repeat_boss()
-            else:
-                t = None
+        if "梦魇" in info.bossName and t and time.time() - t > 5:
+            if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():
+                if (img[int(63 * height_ratio), int(1244 * width_ratio)] > [250, 250, 250]).any():
+                    logger("超出场地", "红")
+                    info.fighttype = ""
+                    info.overflag = True
+                    t = None
+                    control.tap("1")
+                    repeat_boss()
+                else:
+                    t = None
 
-        if "辉萤军势" in info.bossName or info.bossName in ["异构武装"]:
+        if info.bossName in ["异构武装", "辉萤军势", "梦魇辉萤军势", "梦魇凯尔匹"]:
             img2 = img[int(240 * height_ratio):int(320 * height_ratio), int(830 * width_ratio):int(1075 * width_ratio)]
             res2 = ocr(img2)
             if res2 and res2[0].text == "交替点击进行挣脱":
@@ -411,8 +414,18 @@ def over_fight():
 def repeat_boss():
     control.tap("m")
     time.sleep(1)
-    random_click(960, 540)  # 中心
-    random_click(960, 540)  # 中心
+    cx, cy = (0, 0)
+    img = screenshot()
+    img = img[int(490 * height_ratio):int(590 * height_ratio), int(910 * width_ratio):int(1010 * width_ratio)]
+
+    for a in range(100):
+        for b in range(100):
+            if (img[b, a] == [255, 255, 255]).all():
+                cx, cy = (910 + a, 490 + b)
+                break
+        if cx:
+            break
+    random_click(cx, cy)
     time.sleep(0.3)
     random_click(1750, 1000)  # 快速旅行
     random_click(1750, 1000)  # 快速旅行
@@ -473,8 +486,8 @@ def transfer():
     global recovery, tempy, keyflag, x
     keyflag = False
     control.activate()
+    time.sleep(0.1)
     control.activate()
-
     a = int(86400 - (time.time() - datetime(2025, 3, 3, 4, 0, 0).timestamp()) % 86400)
     if a < 20:
         time.sleep(a + 5)
@@ -489,7 +502,7 @@ def transfer():
     if info.waveplate == -1:  # 获取体力
         control.tap("m")
         time.sleep(1)
-        random_click(1810, 640)
+        random_click(1810, 620)
         img = screenshot()
         img = img[int(10 * height_ratio):int(100 * height_ratio), int(1460 * width_ratio):int(1700 * width_ratio)]
         res = everyday_ocr(img)
@@ -528,7 +541,7 @@ def transfer():
         for i in range(config.TwoWei):
             control.click()
 
-    if info.bossName == config.TargetBoss[info.bossIndex % len(config.TargetBoss)] and "梦魇" not in info.bossName and info.bossName not in ["无妄者", "角", "赫卡忒", "芙露德莉斯"]:
+    if info.bossName == config.TargetBoss[info.bossIndex % len(config.TargetBoss)] and info.bossName not in ["无妄者", "角", "赫卡忒", "芙露德莉斯"]:
         info.waitBoss = True
         logger(f"当前目标boss: {info.bossName}")
         repeat_boss()
@@ -713,21 +726,16 @@ def turn_forward(f):
 
 def absorption_action():
     global die
+    t = time.time()
     a = int(86400 - (time.time() - datetime(2025, 3, 3, 4, 0, 0).timestamp()) % 86400)
     if a < 20:
         time.sleep(a + 5)
-    while True:
-        img = screenshot()
-        if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 角色图标
-            break
     control.tap("1")
     control.mouse_middle()
     if absorption_and_receive_rewards():
         if die:
             revive()
         return
-    if config.IsWei:
-        control.tap("e")
     control.shift()
     time.sleep(1)
     if absorption_and_receive_rewards():
@@ -743,10 +751,14 @@ def absorption_action():
         if absorption_and_receive_rewards():
             if die:
                 revive()
+            time.sleep(t + 9 - time.time())
             return
     logger("未掉落声骸", "红")
     if die:
         revive()
+    else:
+        time.sleep(t + 9 - time.time())
+
 
 
 def absorption_and_receive_rewards() -> bool:
