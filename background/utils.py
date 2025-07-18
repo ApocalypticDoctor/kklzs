@@ -22,7 +22,6 @@ from schema import match_template, OcrResult
 from control import control
 from config import config
 from datetime import datetime
-from everyday import everyday
 
 
 index = 0  # 实际索引
@@ -86,7 +85,11 @@ def release_skills_after_ult():
 def fight(tactics, flag):
     while True:
         img = screenshot()
-        if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 没开大招
+        if info.overflag:
+            return True  # 提前结束
+        if info.fighttype == "boss" and (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 没开大招
+            break
+        if info.fighttype == "每日" and (img[int(54 * height_ratio), int(40 * width_ratio)] > [254, 254, 254]).all():  # 没开大招
             break
     for tactic in tactics:  # 遍历对应角色的战斗策略
         if info.overflag:
@@ -213,14 +216,13 @@ def transfer_to_boss():
         findBoss = find_text(280, 135, 600, 900, info.bossName)
         if findBoss:
             break
-        random_x = int(855) * width_ratio
-        random_y = int(y) * height_ratio
-        control.fight_click(random_x, random_y)
+        random_click(855, y)
         time.sleep(0.1)
     if not findBoss:
         control.esc()
         logger("未找到目标boss", "红")
         info.bossName = ""
+        info.bossIndex = -1
         time.sleep(1)
         return False
     x = (findBoss.position.x1 + findBoss.position.x2) // 2
@@ -326,8 +328,8 @@ def new_everyday():
     logger("每日线程启动", "绿")
     while True:
         time.sleep(int(86400 - (time.time() - datetime(2025, 3, 3, 4, 0, 0).timestamp()) % 86400))
-        if config.TargetChallenge:
-            info.everyday = False
+        if config.TargetChallenge != "关闭":
+            info.waveplates = 0
         if find_text(760, 930, 1160, 1000, "点击领取今日月相观测卡奖励"):
             for i in range(3):
                 random_click(600, 600)
@@ -402,9 +404,13 @@ def over_fight():
         if info.fighttype == "每日":
             img3 = img[int(240 * height_ratio):int(320 * height_ratio), int(830 * width_ratio):int(1075 * width_ratio)]  # 挑战成功
             res3 = ocr(img3)
-            if res3 and res3[0].text in ["挑战成功", "挑战达成"]:
+            if (res3 and res3[0].text in ["挑战成功", "挑战达成"]):
                 info.fighttype = ""
                 info.overflag = True
+        if info.fighttype == "悬崖" and template_pic("task"):
+            info.fighttype = ""
+            info.overflag = True
+
 
     except Exception as e:
         logger(str(e) + " over_fight")
@@ -541,7 +547,7 @@ def transfer():
         for i in range(config.TwoWei):
             control.click()
 
-    if info.bossName == config.TargetBoss[info.bossIndex % len(config.TargetBoss)] and info.bossName not in ["无妄者", "角", "赫卡忒", "芙露德莉斯"]:
+    if info.bossName == config.TargetBoss[info.bossIndex % len(config.TargetBoss)] and info.bossName not in ["无妄者", "角", "赫卡忒", "芙露德莉斯"] and (info.waveplates == 240 or info.waveplate < 60):
         info.waitBoss = True
         logger(f"当前目标boss: {info.bossName}")
         repeat_boss()
@@ -550,41 +556,25 @@ def transfer():
 
     control.tap(win32con.VK_F2)
     time.sleep(0.8)
-    if info.bossIndex == -1:
-        if not find_pic(46, 411, 110, 475, "强者之路.png", 0.6):
-            tempy = 140
-    if config.TargetChallenge:
-        a = 0
+    if info.bossIndex == -1 and not find_pic(46, 411, 110, 475, "强者之路.png", 0.6):
+        tempy = 140
+
+    if config.TargetChallenge != "关闭":
         if find_pic(55, 45, 95, 96, "每日.png", 0.6):
-            if config.TargetChallenge == "无音区" and info.waveplate >= 180:
-                a = 180
-            elif config.TargetChallenge in ["角色", "武器", "贝币", "迅刀", "音感仪", "长刃", "拳套", "枪"] and info.waveplate >= 200:
-                a = 200
-            if a:
-                from challenge import challenge, reset
-                logger("体力到达额定上限 进行第一次自动清体力", "蓝")
-                challenge(a, tempy)
-                reset()
-                logger("尝试进行自动每日任务", "蓝")
+            if info.waveplate >= 180:
+                logger("进行第一次自动清体力", "蓝")
                 everyday()
-        else:
-            info.everyday = True
-            if config.TargetChallenge == "无音区":
                 info.waveplates = 180
-                a = 60
-            else:
-                info.waveplates = 200
-                a = 40
-            if info.waveplate + int(86400 - (time.time() - datetime(2025, 3, 3, 4, 0, 0).timestamp()) % 86400) // 360 >= 240:
-                if info.waveplate >= a:
-                    from challenge import challenge, reset
-                    logger("进行第二次自动清体力", "蓝")
-                    challenge(a, tempy)
-                    reset()
-            else:
-                info.waveplates = 240
+        else:
+            info.waveplate = 180
+        if info.waveplate + int(86400 - (time.time() - datetime(2025, 3, 3, 4, 0, 0).timestamp()) % 86400) // 360 >= 240:
+            if info.waveplate >= 60:
+                from challenge import challenge3
+                logger("进行第二次自动清体力", "蓝")
+                challenge3(60)
+            info.waveplates = 240
     else:
-        info.everyday = True
+        info.waveplates = 240
 
     info.waitBoss = True
     info.bossIndex += 1
@@ -597,39 +587,26 @@ def transfer():
         return transfer_to_boss()
 
 
-def jinru(flag=True, num=0):
+def jinru(flag=True):
     # 进入
     control.tap("f")
     control.tap("f")
     if flag:
         if info.bossName == "芙露德莉斯":
             time.sleep(5)
-        # 推荐等级
         time.sleep(2)
         y = ((config.DungeonWeeklyBossLevel - 40) / 10) * 85 + 197
         random_click(311, y)  # 推荐等级
         random_click(311, y)
     else:
-        time.sleep(2.3)
-        if num < 5:
-            y = 190 + 110 * num
-            time.sleep(0.5)
-            control.click()
-            time.sleep(1)
-            control.tap("f")
-            time.sleep(3)
-            random_click(970, 960)
-            time.sleep(1.5)
-            random_click(300, y)
-            time.sleep(0.3)
-        else:
-            time.sleep(5)
+        time.sleep(7)
     random_click(1720, 980)  # 单人挑战
     time.sleep(0.2)
     if info.waveplate < 60:
         time.sleep(0.3)
         random_click(1250, 680)  # 结晶波片不足
     time.sleep(1.3)
+    random_click(1650, 990)  # 开启挑战
     random_click(1650, 990)  # 开启挑战
     time.sleep(1.3)
     wait_home()
@@ -715,14 +692,6 @@ def wait_home():
             return
         control.click()
         time.sleep(0.2)
-
-
-def turn_forward(f):
-    control.key_press(f)
-    forward(0.02, "w")
-    control.key_release(f)
-    control.mouse_middle()
-    time.sleep(0.4)
 
 def absorption_action():
     global die
@@ -1218,12 +1187,64 @@ def lock_4c(flag):
             else:
                 return
 
+def everyday():
+    from challenge import challenge1, challenge2, challenge3
+    random_click(77, 315 + tempy)  # 周期挑战
+    if config.TargetChallenge in ["迅刀", "音感仪", "长刃", "拳套", "枪"]:
+        img = screenshot()
+        img = img[int(130 * height_ratio):int(180 * height_ratio), int(700 * width_ratio):int(1100 * width_ratio)]
+        res = everyday_ocr(img)
+        if type(res) == int:
+            challenge1()
+            control.tap(win32con.VK_F2)
+            time.sleep(0.5)
+            random_click(77, 315 + tempy)  # 周期挑战
+            challenge3(60)
+        else:
+            challenge3(180)
+    elif config.TargetChallenge != "无":
+        random_click(400, 500)  # 无音清剿
+        img = screenshot()
+        img = img[int(130 * height_ratio):int(180 * height_ratio), int(700 * width_ratio):int(1100 * width_ratio)]
+        res = everyday_ocr(img)
+        if type(res) == int:
+            challenge2()
+        else:
+            challenge3(180)
+    else:
+        challenge3(180)
+    control.tap(win32con.VK_F2)
+    time.sleep(0.8)
+    img = screenshot()
+    img = img[int(140 * height_ratio):int(830 * height_ratio), int(350 * width_ratio):int(1810 * width_ratio)]
+    res = everyday_ocr(img)
+    count = 0
+    num = 0
+    for i in range(len(res)):
+        if res[i] == "领取":
+            count += res[i + 1]
+            num += 1
+        if count >= 100:
+            for a in range(num):
+                random_click(1670, 195)
+            random_click(1720, 920)
+            time.sleep(0.3)
+            random_click(960, 540)
+            time.sleep(0.4)
+            control.esc()
+            info.echoNum += 1
+            logger("每日任务已经做完", "绿")
+            time.sleep(2)
+            return
 
-# def template_pic(target: str):
-#     img = screenshot()
-#     temp = cv2.imdecode(np.fromfile(root_path + "\\template\\" + target + ".png", dtype=np.uint8), 1)
-#     temp = cv2.resize(temp, (int(temp.shape[1] * height_ratio), int(temp.shape[0] * width_ratio)), interpolation=cv2.INTER_AREA)
-#     h, w = temp.shape[:2]
-#     res = cv2.matchTemplate(img, temp, cv2.TM_CCOEFF)
-#     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-#     return int(max_loc[0] + 0.5 * w), int(max_loc[1] + 0.5 * h)
+def template_pic(target):
+    img = screenshot(1)
+    temp = temp = cv2.imdecode(np.fromfile(root_path + "\\template\\" + target + ".png", dtype=np.uint8), 1)
+    temp = cv2.resize(temp, (int(temp.shape[1] * width_ratio), int(temp.shape[0] * height_ratio)), interpolation=cv2.INTER_AREA)
+    h, w = temp.shape[:2]
+    res = cv2.matchTemplate(img, temp, cv2.TM_CCOEFF_NORMED)
+    loc = np.where(res >= 0.6)
+    for pt in zip(*loc[::-1]):
+        if int(pt[0] + 0.5 * w) > 100 * width_ratio:
+            return int(pt[0] + 0.5 * w), int(pt[1] + 0.5 * h)
+    return None

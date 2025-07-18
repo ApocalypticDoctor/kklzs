@@ -33,11 +33,10 @@ def get_color(percentage):
 
 
 class OutputRedirector:
-    def __init__(self, text_browser, echoNum, over, TargetChallenge):
+    def __init__(self, text_browser, echoNum, over):
         self.text_browser = text_browser
         self.echoNum = echoNum
         self.over = over
-        self.TargetChallenge = TargetChallenge
 
     def write(self, text):
         global num
@@ -45,8 +44,6 @@ class OutputRedirector:
         text = text.rstrip('\n')
         if "屌毛" in text:
             self.over()
-        if "体力已经清理完毕" in text and self.TargetChallenge == "无音区":
-            num = 0
         if "当前个数为" in text:
             num = int(text[text.index("当前个数为") + 5:-1])
             self.echoNum.setText(f'<font color="{get_color(num / 3000)}">当前声骸<br/>个数: {num}</font>')
@@ -88,7 +85,6 @@ class Ui_MainWindow(QtCore.QObject):
         self.up = 0
         self.flag = False
         self.bossList = config.TargetBoss
-        self.TargetChallenge = config.TargetChallenge
         if os.path.exists("echo_config.yaml"):
             self.echo0_c1 = config.EchoLockConfig["凝夜白霜"]["1COST"]
             self.echo0_c3 = config.EchoLockConfig["凝夜白霜"]["3COST"]
@@ -476,11 +472,11 @@ class Ui_MainWindow(QtCore.QObject):
         self.levelBox.setGeometry(QtCore.QRect(int(130 * screen), int(65 * screen), int(60 * screen), int(30 * screen)))
         self.levelBox.setFont(font)
         self.levelBox.setObjectName("levelBox")
-        self.levelBox.addItem("")
-        self.levelBox.addItem("")
-        self.levelBox.addItem("")
-        self.levelBox.addItem("")
-        self.levelBox.addItem("")
+        self.levelBox.addItem("80")
+        self.levelBox.addItem("70")
+        self.levelBox.addItem("60")
+        self.levelBox.addItem("50")
+        self.levelBox.addItem("40")
 
         # 角色索引
         self.role = QtWidgets.QLabel(self.frame3)
@@ -610,9 +606,43 @@ class Ui_MainWindow(QtCore.QObject):
         self.group3.addButton(self.radioButton5)
         self.group3.addButton(self.radioButton6)
 
+        # 每日
+        self.everyday = QtWidgets.QLabel(self.frame3)
+        self.everyday.setGeometry(QtCore.QRect(int(30 * screen), int(140 * screen), int(90 * screen), int(40 * screen)))
+        self.everyday.setStyleSheet("color: rgb(240, 240, 240)")
+        font = QtGui.QFont()
+        font.setFamily("筑紫A丸")
+        font.setPointSize(int(15 * scale_factor))
+        self.everyday.setFont(font)
+        self.everyday.setObjectName("everyday")
+        font = QtGui.QFont()
+        font.setFamily("筑紫A丸")
+        font.setPointSize(int(12 * scale_factor))
+        self.tarBox = QtWidgets.QComboBox(self.frame3)
+        self.tarBox.setGeometry(QtCore.QRect(int(130 * screen), int(150 * screen), int(120 * screen), int(30 * screen)))
+        self.tarBox.setFont(font)
+        self.tarBox.setObjectName("tarBox")
+        self.tarBox.setMaxVisibleItems(7)
+        self.tarBox.addItem("关闭")
+        self.tarBox.addItem("无")
+        self.tarBox.addItem("愿戴/奔狼")
+        self.tarBox.addItem("流云/幽夜")
+        self.tarBox.addItem("此间/无惧")
+        self.tarBox.addItem("凌冽/此间")
+        self.tarBox.addItem("幽夜/高天")
+        self.tarBox.addItem("风套/冰套")
+        self.tarBox.addItem("冰套/雷套")
+        self.tarBox.addItem("光套/不绝")
+        self.tarBox.addItem("雷套/火套")
+        self.tarBox.addItem("暗套/轻云")
+        self.tarBox.addItem("迅刀")
+        self.tarBox.addItem("音感仪")
+        self.tarBox.addItem("长刃")
+        self.tarBox.addItem("拳套")
+        self.tarBox.addItem("枪")
         # 连招
         self.fight = QtWidgets.QLabel(self.frame3)
-        self.fight.setGeometry(QtCore.QRect(int(30 * screen), int(180 * screen), int(90 * screen), int(40 * screen)))
+        self.fight.setGeometry(QtCore.QRect(int(30 * screen), int(230 * screen), int(90 * screen), int(40 * screen)))
         self.fight.setStyleSheet("color: rgb(240, 240, 240)")
         font = QtGui.QFont()
         font.setFamily("筑紫A丸")
@@ -620,7 +650,7 @@ class Ui_MainWindow(QtCore.QObject):
         self.fight.setFont(font)
         self.fight.setObjectName("fight")
         self.fightText = QtWidgets.QTextBrowser(self.frame3)
-        self.fightText.setGeometry(QtCore.QRect(int(130 * screen), int(200 * screen), int(381 * screen), int(321 * screen)))
+        self.fightText.setGeometry(QtCore.QRect(int(130 * screen), int(250 * screen), int(381 * screen), int(310 * screen)))
         self.fightText.setStyleSheet("color: rgb(240,240,240);border: 1px solid block;QTextBrowser:active{border: 1px solid rgb(0,120,215)}")
         font = QtGui.QFont()
         font.setFamily("筑紫A丸")
@@ -631,7 +661,7 @@ class Ui_MainWindow(QtCore.QObject):
 
         # 开大连招
         self.ultFight = QtWidgets.QLabel(self.frame3)
-        self.ultFight.setGeometry(QtCore.QRect(int(540 * screen), int(180 * screen), int(90 * screen), int(40 * screen)))
+        self.ultFight.setGeometry(QtCore.QRect(int(540 * screen), int(230 * screen), int(90 * screen), int(40 * screen)))
         self.ultFight.setStyleSheet("color: rgb(240, 240, 240)")
         font = QtGui.QFont()
         font.setFamily("筑紫A丸")
@@ -639,7 +669,7 @@ class Ui_MainWindow(QtCore.QObject):
         self.ultFight.setFont(font)
         self.ultFight.setObjectName("ultFight")
         self.ultFightText = QtWidgets.QTextBrowser(self.frame3)
-        self.ultFightText.setGeometry(QtCore.QRect(int(640 * screen), int(200 * screen), int(381 * screen), int(321 * screen)))
+        self.ultFightText.setGeometry(QtCore.QRect(int(640 * screen), int(250 * screen), int(381 * screen), int(310 * screen)))
         self.ultFightText.setStyleSheet("color: rgb(240,240,240);border: 1px solid block;QTextBrowser:active{border: 1px solid rgb(0,120,215)}")
         font = QtGui.QFont()
         font.setFamily("筑紫A丸")
@@ -650,7 +680,7 @@ class Ui_MainWindow(QtCore.QObject):
 
         # 编写
         self.fightTip = QtWidgets.QLabel(self.frame3)
-        self.fightTip.setGeometry(QtCore.QRect(int(280 * screen), int(530 * screen), int(571 * screen), int(161 * screen)))
+        self.fightTip.setGeometry(QtCore.QRect(int(280 * screen), int(555 * screen), int(571 * screen), int(161 * screen)))
         self.fightTip.setStyleSheet("color: rgb(240, 240, 240)")
         font = QtGui.QFont()
         font.setFamily("筑紫A丸")
@@ -1067,7 +1097,7 @@ class Ui_MainWindow(QtCore.QObject):
         self.frame2.raise_()
         self.frame1.raise_()
         self.frame0.raise_()
-        sys.stdout = OutputRedirector(self.logText, self.echoNum, self.startOver, self.TargetChallenge)
+        sys.stdout = OutputRedirector(self.logText, self.echoNum, self.startOver)
         MainWindow.setCentralWidget(self.centralwidget)
 
         def isdown():
@@ -1525,16 +1555,12 @@ class Ui_MainWindow(QtCore.QObject):
         self.path.setText(_translate("MainWindow", "游戏路径:  "))
         self.pathButton.setText(_translate("MainWindow", "选择"))
         self.level.setText(_translate("MainWindow", "周本等级:"))
-        self.levelBox.setItemText(0, _translate("MainWindow", "80"))
-        self.levelBox.setItemText(1, _translate("MainWindow", "70"))
-        self.levelBox.setItemText(2, _translate("MainWindow", "60"))
-        self.levelBox.setItemText(3, _translate("MainWindow", "50"))
-        self.levelBox.setItemText(4, _translate("MainWindow", "40"))
         self.role.setText(_translate("MainWindow", "角色索引:"))
         self.boss.setText(_translate("MainWindow", "Boss列表:"))
         self.iswei.setText(_translate("MainWindow", "1号位是否维: "))
         self.twoWei.setText(_translate("MainWindow", "是否二命维: "))
         self.auto.setText(_translate("MainWindow", "是否自动启动: "))
+        self.everyday.setText(_translate("MainWindow", "每日: "))
         self.radioButton1.setText(_translate("MainWindow", "是"))
         self.radioButton2.setText(_translate("MainWindow", "否"))
         self.radioButton3.setText(_translate("MainWindow", "是"))
@@ -1587,7 +1613,8 @@ class Ui_MainWindow(QtCore.QObject):
                                                             "2. 游戏窗口必须为16:9, 推荐为1280*720, 镜头重置必须打开\n"
                                                             "3. 先写配置再启动, 合成需要进入合成界面, 其他在大世界\n"
                                                             "4. 更新神秘按钮\n"
-                                                            "5. 有问题先看日志"))
+                                                            "5. 探索工具需要用钩锁\n"
+                                                            "6. 有问题先看日志"))
 
     def initConfig(self):
         a = 0
@@ -1623,6 +1650,7 @@ class Ui_MainWindow(QtCore.QObject):
             a += 1
         if config.FightTacticsUlt:
             self.ultFightText.setText('\n'.join(map(str, config.FightTacticsUlt)))
+        self.tarBox.setCurrentText(str(config.TargetChallenge))
         if a == 5:
             self.bossButton.setEnabled(True)
             self.temp1 = 1
@@ -1733,7 +1761,7 @@ class Ui_MainWindow(QtCore.QObject):
                     "TargetBoss": self.bossList,
                     "FightTactics": self.fightText.toPlainText().split("\n"),
                     "FightTacticsUlt": self.ultFightText.toPlainText().split("\n"),
-                    "TargetChallenge": self.TargetChallenge,
+                    "TargetChallenge": self.tarBox.currentText(),
                     "Automatic": Automatic
                 }
                 if basicConfig != temp:

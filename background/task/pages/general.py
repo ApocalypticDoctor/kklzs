@@ -1,5 +1,3 @@
-import time
-
 from . import *
 
 pages = []
@@ -41,13 +39,10 @@ def leave_action(positions: dict[str, Position]) -> bool:
     control.activate()
     # 下个boss和现在一样 并且背包没满
     a = info.bossName == config.TargetBoss[info.bossIndex % len(config.TargetBoss)] and info.echoNum < 3000
-    # 请体力 且 清日常体力小于240
-    b = config.TargetChallenge == "无音区" and info.waveplates < 240 and info.waveplate >= 60
-    c = config.TargetChallenge in ["角色", "武器", "贝币", "迅刀", "音感仪", "长刃", "拳套", "枪"] and info.waveplates < 240 and info.waveplate >= 40
     d = int(86400 - (time.time() - datetime(2025, 3, 3, 4, 0, 0).timestamp()) % 86400)
     if d < 10:
         time.sleep(d + 5)
-    if info.everyday and a and not b and not c:
+    if a and (info.waveplates == 240 or info.waveplate < 60):
         random_click(1300, 680)
         random_click(1300, 680)
         time.sleep(1)

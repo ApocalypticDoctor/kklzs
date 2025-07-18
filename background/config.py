@@ -7,7 +7,7 @@ from typing import Dict, List
 class Config(BaseModel):
     MaxIdleTime: int = Field(2, title="最大空闲时间")
     TargetBoss: list[str] = Field([], title="目标Boss")
-    TargetChallenge: str = Field("", title="目标副本")
+    TargetChallenge: str = Field("关", title="目标副本")
     FightTactics: list[str] = Field([], title="战斗策略")
     RoleIndex: str = Field("123", title="角色索引")
     IsWei: bool = Field(True, title="是否维")

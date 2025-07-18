@@ -23,7 +23,6 @@ class StatusInfo(BaseModel):
     echoNum: int = Field(0, title="声骸数量")
     echoLockNum: int = Field(0, title="锁定声骸数量")
     taoNums: dict = Field({}, title="各套个数")
-    everyday: bool = Field(False, title="每日")
     fighttype: str = Field("", title="战斗类型")
     overflag: bool = Field(False, title="结束标志")
     q: Queue = Field(None)

@@ -70,7 +70,7 @@ def everyday_ocr(img: np.ndarray):
     return res
 
 
-if current_process().name in ["boss", "合成", "锁定"]:
+if current_process().name not in ["boss", "合成", "锁定"]:
     ocr_mutex = threading.Lock()
     logging.disable(logging.WARNING)  # 关闭WARNING日志的打印
     ocrIns = init()
