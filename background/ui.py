@@ -1560,7 +1560,7 @@ class Ui_MainWindow(QtCore.QObject):
         self.iswei.setText(_translate("MainWindow", "1号位是否维: "))
         self.twoWei.setText(_translate("MainWindow", "是否二命维: "))
         self.auto.setText(_translate("MainWindow", "是否自动启动: "))
-        self.everyday.setText(_translate("MainWindow", "每日: "))
+        self.everyday.setText(_translate("MainWindow", "每日双倍: "))
         self.radioButton1.setText(_translate("MainWindow", "是"))
         self.radioButton2.setText(_translate("MainWindow", "否"))
         self.radioButton3.setText(_translate("MainWindow", "是"))
