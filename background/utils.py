@@ -87,7 +87,7 @@ def fight(tactics, flag):
         img = screenshot()
         if info.overflag:
             return True  # 提前结束
-        if info.fighttype == "boss" and (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 没开大招
+        if info.fighttype == "boss" and (img[int(46 * height_ratio), int(1726 * width_ratio)] > [254, 254, 254]).all():  # 没开大招
             break
         if info.fighttype == "每日" and (img[int(54 * height_ratio), int(40 * width_ratio)] > [254, 254, 254]).all():  # 没开大招
             break
@@ -114,10 +114,10 @@ def fight(tactics, flag):
                 control.tap(tactic)
                 time.sleep(0.1)
                 img = screenshot()
-                if (img[int(43 * height_ratio), int(1740 * width_ratio)] < [255, 255, 255]).all():  # 等待大招时间
+                if (img[int(46 * height_ratio), int(1726 * width_ratio)] < [255, 255, 255]).all():  # 等待大招时间
                     while True:
                         img = screenshot()
-                        if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():  # 等待大招时间
+                        if (img[int(46 * height_ratio), int(1726 * width_ratio)] > [254, 254, 254]).all():  # 等待大招时间
                             pool.submit(over_fight)
                             release_skills_after_ult()
                             break
@@ -172,7 +172,8 @@ bossDict = {
     "梦魇哀声鸷": 4,
     "梦魇辉萤军势": 1,
     "梦魇凯尔匹": 4,
-    "荣耀狮像": 3
+    "荣耀狮像": 3,
+    "梦魇赫卡忒": 0
 }
 
 bossPoint = {
@@ -203,7 +204,9 @@ bossPoint = {
     "梦魇哀声鸷": 904,
     "梦魇辉萤军势": 891,
     "梦魇凯尔匹": 904,
-    "荣耀狮像": 829
+    "荣耀狮像": 829,
+    "芬莱克": 829,
+    "梦魇赫卡忒": 904
 }
 
 def transfer_to_boss():
@@ -241,6 +244,11 @@ def transfer_to_boss():
         jinru()
     elif info.bossName in ["芙露德莉斯"]:
         jinru()
+    elif info.bossName == "梦魇赫卡忒":
+        forward(0.5, "a")
+        control.tap("f")
+        control.tap("f")
+        wait_home()
     else:
         move_boss()
     info.lastFightTime = datetime.now()  # 重置最近检测到战斗时间
@@ -343,7 +351,7 @@ def over_fight():
         if not t:
             t = time.time()
         mutex.release()
-        img = screenshot()
+        img = screenshot(1)
         if len(die) == 3:
             info.fighttype = ""
             info.overflag = True
@@ -365,8 +373,8 @@ def over_fight():
                 wait_home()
                 move_boss()
         if info.fighttype == "boss":
-            if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all(): #  角色图标
-                if (img[int(y * height_ratio), int(x * width_ratio)] < [255, 255, 255]).any(): # boss没有血条
+            if (img[int(46 * height_ratio), int(1726 * width_ratio)] > [254, 254, 254]).all(): #  角色图标
+                if (img[int(y * height_ratio), int(x * width_ratio)] < [255, 255, 255]).all(): # boss没有血条
                     info.fighttype = ""
                     info.overflag = True
                     t = None
@@ -379,10 +387,10 @@ def over_fight():
                 elif (img[int(553 * height_ratio), int(1755 * width_ratio)] < [150, 150, 150]).all() and "3" not in die: # 3号位死
                     die.append("3")
                     logger("3号位死了", "红")
-            if info.bossName == "赫卡忒" and ((img[int(43 * height_ratio), int(1740 * width_ratio)] < [5, 5, 5]).all() and (img[int(61 * height_ratio), int(678 * width_ratio)] < [5, 5, 5]).all()):
+            if info.bossName == "赫卡忒" and ((img[int(46 * height_ratio), int(1726 * width_ratio)] < [5, 5, 5]).all() and (img[int(61 * height_ratio), int(678 * width_ratio)] < [5, 5, 5]).all()):
                 time.sleep(1)
-        if "梦魇" in info.bossName and t and time.time() - t > 5:
-            if (img[int(43 * height_ratio), int(1740 * width_ratio)] > [254, 254, 254]).all():
+        if "梦魇" in info.bossName and t and time.time() - t > 5 and info.bossName != "梦魇赫卡忒":
+            if (img[int(46 * height_ratio), int(1726 * width_ratio)] > [254, 254, 254]).all():
                 if (img[int(63 * height_ratio), int(1244 * width_ratio)] > [250, 250, 250]).any():
                     logger("超出场地", "红")
                     info.fighttype = ""
@@ -720,7 +728,7 @@ def absorption_action():
         if absorption_and_receive_rewards():
             if die:
                 revive()
-            time.sleep(t + 9 - time.time())
+            time.sleep(t + 11 - time.time())
             return
     logger("未掉落声骸", "红")
     if die:
@@ -831,361 +839,6 @@ def find_pic(x1: int, y1: int, x2: int, y2: int, template_name: str = None, thre
     template = np.array(template)
     result = match_template(img, template, threshold)
     return result
-
-
-def is_echo_main_status_valid(this_echo_set, this_echo_cost, this_echo_main_status, echo_lock_config):
-    if this_echo_set in echo_lock_config:
-        if this_echo_cost in echo_lock_config[this_echo_set]:
-            return this_echo_main_status in echo_lock_config[this_echo_set][this_echo_cost]
-    return False
-
-
-def check_echo_cost(image, x1, y1, x2, y2):
-    image = image[int(y1 * height_ratio):int(y2 * height_ratio), int(x1 * width_ratio):int(x2 * width_ratio)]
-    res = ocr(image)[0].text
-    if "56" in res:
-        return "1"
-    elif res == "20":
-        return "3"
-    elif res == "30":
-        return "4"
-    else:
-        return "??"
-
-
-def check_echo_main_status(image, x1, y1, x2, y2):
-    try:
-        image = image[int(y1 * height_ratio):int(y2 * height_ratio), int(x1 * width_ratio):int(x2 * width_ratio)]
-        res = ocr(image)[0].text
-        if res:
-            if "灭" in res:
-                res = "湮灭伤害加成"
-            elif "冷" in res:
-                res = "冷凝伤害加成"
-            return res
-        else:
-            return "??"
-    except Exception as e:
-        logger("识别主属性失败" + str(e), "红")
-        return "??"
-
-def check_echo_set(image, x1, y1, x2, y2):
-    try:
-        image = image[int(y1 * height_ratio):int(y2 * height_ratio), int(x1 * width_ratio):int(x2 * width_ratio)]
-        res = ocr(image)
-        for i in range(len(res)):
-            if res[i].text == "合鸣效果":
-                if "幽夜" in res[i + 1].text:
-                    return "幽夜隐匿之帷"
-                if "之" in res[i + 1].text:
-                    return res[i + 1].text[:6]
-                else:
-                    return res[i + 1].text[:4]
-        return "??"
-    except Exception as e:
-        logger("识别套装失败" + str(e), "红")
-        return "??"
-
-def check_echo_set2(image, flag, tz):
-    try:
-        image = cv2.resize(image, (1920, 1080), interpolation=cv2.INTER_LINEAR)
-        if flag == 1:
-            image = image[315:360, 830:870]
-        else:
-            image = image[310:345, 1430:1470]
-        for i in tz:
-            temp = cv2.imdecode(np.fromfile(f"{root_path}/template/{i}/1.png", dtype=np.uint8), 1)
-            res = cv2.matchTemplate(image, temp, cv2.TM_CCOEFF_NORMED)
-            loc = np.where(res >= 0.6)
-            for pt in zip(*loc[::-1]):
-                return i
-    except Exception as e:
-        logger("识别套装失败" + str(e), "红")
-        return "??"
-
-def check_echo_name(image, x1, y1, x2, y2):
-    try:
-        image = image[int(y1 * height_ratio):int(y2 * height_ratio), int(x1 * width_ratio):int(x2 * width_ratio)]
-        res = ocr(image)
-        if "灭" in res[0].text:
-            return "湮灭棱镜"
-        if "阿" in res[0].text:
-            return "阿嗞嗞"
-        if "咔" in res[0].text and "咔咔" not in res[0].text:
-            return "咔嚓嚓"
-        if "撤" in res[0].text:
-            return "赦罪节使"
-        if "碎" in res[0].text:
-            return "碎獠猪"
-        return res[0].text
-    except Exception as e:
-        logger("识别声骸名出错" + str(e), "红")
-        return "??"
-
-
-def lock_echo_synthesis(echo_cost, echo_main_status, echo_set):
-    echo_cost = echo_cost + "COST"
-    if is_echo_main_status_valid(echo_set, echo_cost, echo_main_status, config.EchoLockConfig):
-        info.echoLockNum += 1
-        control.tap("c")
-        return True
-    return False
-
-
-def is_lock():
-    global temptao
-    image = screenshot()
-    this_echo_name = check_echo_name(image, 705, 130, 940, 180)  # 识别声骸名
-    if "梦" in this_echo_name:
-        this_echo_name = "梦魇" + this_echo_name[2:]
-    if this_echo_name == "梦魇·燎照之骑":
-        this_echo_set = "熔山裂谷"
-        this_echo_cost = "4"
-    elif this_echo_name == "无常凶鹭":
-        this_echo_set = "轻云出月"
-        this_echo_cost = "4"
-    elif this_echo_name == "角鳄":
-        this_echo_set = check_echo_set2(image, 1, ["愿戴荣光之旅", "奔狼燎原之焰"])
-        this_echo_cost = "3"
-    elif this_echo_name in ["梦魇·凯尔匹", "共鸣回响·芙露德莉斯"]:
-        this_echo_set = check_echo_set2(image, 1, ["流云逝尽之空", "愿戴荣光之旅"])
-        this_echo_cost = "4"
-    else:
-        this_echo_set = check_echo_set(image, 705, 650, 900, 860)  # 识别套装属性
-        this_echo_cost = check_echo_cost(image, 1165, 484, 1235, 520)  # 识别声骸COST1/3/4
-    this_echo_main_status = check_echo_main_status(image, 780, 435, 1030, 475)  # 识别主词条
-    log = "当前声骸为:" + this_echo_set + "套 " + this_echo_cost + "C " + this_echo_main_status + " " + this_echo_name
-    if config.EchoLockConfig[this_echo_set]["PASS"] and this_echo_name in config.EchoLockConfig[this_echo_set]["PASS"]:
-        logger(log + " 忽略", "红", flag=False)
-    elif lock_echo_synthesis(this_echo_cost, this_echo_main_status, this_echo_set):  # 锁定声骸
-        info.taoNums[this_echo_set] += 1
-        logger(log + " 锁定", "绿", flag=False)
-    else:
-        logger(log + " 不锁定", "红", flag=False)
-    control.esc()
-    time.sleep(0.2)
-
-
-def add_echo_list(img):
-    def shibie(tz):
-        tzlist = []
-        if active == "dev":
-            temp = cv2.imdecode(np.fromfile(f"{root_path}/template/{tz}/0.png", dtype=np.uint8), 1)
-            res = cv2.matchTemplate(img, temp, cv2.TM_CCOEFF_NORMED)
-            loc = np.where(res >= 0.5)
-            for pt in zip(*loc[::-1]):
-                if not tzlist:
-                    tzlist.append((pt[0], pt[1] + 24))
-                    cv2.rectangle(img, pt, (pt[0] + 24, pt[1] + 24), (255, 255, 0), 1)
-                else:
-                    for j in tzlist:
-                        if abs(j[0] - pt[0]) < 10 and abs(j[1] - pt[1] - 24) < 10:
-                            break
-                        if j == tzlist[-1]:
-                            tzlist.append((pt[0], pt[1] + 24))
-                            cv2.rectangle(img, pt, (pt[0] + 24, pt[1] + 24), (255, 255, 0), 1)
-
-            if not tzlist:
-                return
-        for j in range(2):
-            if active == "dev":
-                if len(config.EchoLockConfig[tz][f"{j * 2 + 1}COST"]) == 0:
-                    continue
-            path = f"{root_path}/template/{tz}/{j * 2 + 1}C"
-            size = get_file_count(path)
-            for k in range(size):
-                temp = cv2.imdecode(np.fromfile(f"{path}/{k}.png", dtype=np.uint8), 1)
-                res = cv2.matchTemplate(img, temp, cv2.TM_CCOEFF_NORMED)
-                loc = np.where(res >= 0.8)
-                for pt in zip(*loc[::-1]):
-                    if not click_list:
-                        for i in tzlist:
-                            if abs(pt[0] - i[0] + 70) < 30 and abs(pt[1] - i[1]) < 30:
-                                echo_mutex.acquire()
-                                click_list.append((pt[0] + 30, pt[1] + 30))
-                                tzlist.remove(i)
-                                cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
-                                echo_mutex.release()
-                                if not tzlist:
-                                    return
-                        if not tzlist:
-                            echo_mutex.acquire()
-                            click_list.append((pt[0] + 30, pt[1] + 30))
-                            cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
-                            echo_mutex.release()
-                    else:
-                        for j in click_list:
-                            if abs(j[0] - (pt[0] + 30)) < 30 and abs(j[1] - (pt[1] + 30)) < 30:
-                                break
-                            if j == click_list[-1]:
-                                for i in tzlist:
-                                    if abs(pt[0] - i[0] + 70) < 30 and abs(pt[1] - i[1]) < 30:
-                                        echo_mutex.acquire()
-                                        click_list.append((pt[0] + 30, pt[1] + 30))
-                                        tzlist.remove(i)
-                                        cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
-                                        echo_mutex.release()
-                                        if not tzlist:
-                                            return
-                                if not tzlist:
-                                    echo_mutex.acquire()
-                                    click_list.append((pt[0] + 30, pt[1] + 30))
-                                    cv2.rectangle(img, pt, (pt[0] + 70, pt[1] + 70), (0, 255, 0), 1)
-                                    echo_mutex.release()
-
-    logger("正在识别声骸...", "蓝", False)
-    click_list = []
-    threads = []
-    echo_mutex = threading.Lock()
-    tao = list(config.EchoLockConfig.keys())
-    for i in tao:
-        if active == "dev":
-            if len(config.EchoLockConfig[i]["1COST"]) + len(config.EchoLockConfig[i]["3COST"]) == 0:
-                continue
-        thread = threading.Thread(target=shibie, args=(i,))
-        thread.start()
-        threads.append(thread)
-    for thread in threads:
-        thread.join()
-
-    click_list = sorted(click_list, key=lambda point: (point[1], point[0]))
-    for i in range(len(click_list)):
-        if i != 0 and abs(click_list[i][1] - click_list[i - 1][1] < 50):
-            click_list[i] = (click_list[i][0], click_list[i - 1][1])
-    click_list = sorted(click_list, key=lambda point: (point[1], point[0]))
-    logger(f"识别结束 共{len(click_list)}个", "蓝", False)
-    # cv2.namedWindow('Image', cv2.WINDOW_AUTOSIZE)
-    # cv2.imshow("Image", img)
-    # cv2.waitKey(0)
-    return click_list
-
-
-def echo_synthesis():
-    control.activate()
-    img = screenshot(1)
-    img = cv2.resize(img, (1920, 1080), interpolation=cv2.INTER_LINEAR)
-    res = ocr(img)
-    if len(res) > 1 and "额外获得" in res[1].text:
-        img = img[0:res[1].position.y1:, 0:1920]
-        freegain = True
-    else:
-        freegain = False
-    click_list = add_echo_list(img)
-    for i in range(len(click_list)):
-        click_x, click_y = click_list[i]
-        random_click(click_x, click_y)  # 点开声骸
-        is_lock()
-
-    if freegain:
-        random_click(res[1].position.x1, res[1].position.y1)
-        random_click(res[1].position.x1, res[1].position.y1)
-        for i in range(3):
-            control.scroll(-15, int(res[1].position.x1 * width_ratio), int(res[1].position.y1 * height_ratio))
-        time.sleep(1)
-
-        img = screenshot(1)
-        img = cv2.resize(img, (1920, 1080), interpolation=cv2.INTER_LINEAR)
-        res = ocr(img)
-        y = 0
-        for i in res:
-            if i.text == "额外获得":
-                y = i.position.y2
-                img = img[y:1080, 0:1920]
-                break
-        click_list = add_echo_list(img)
-        for i in range(len(click_list)):
-            click_x, click_y = click_list[i]
-            random_click(click_x, click_y + y)  # 点开声骸
-            is_lock()
-    time.sleep(0.2)
-    control.esc()
-
-addy = 0
-def echo_lock4c():
-    global addy
-    def switch(image):
-        global addy
-        while (image[111 + addy, 1219] > [150, 150, 150]).all():
-            addy += 1
-        addy -= 1
-
-    control.activate()
-    control.tap("b")
-    time.sleep(1)
-    random_click(75, 330)  # 声骸
-    random_click(230, 988)  # 筛选
-    random_click(1180, 900)  # 重置
-    random_click(1180, 900)  # 重置
-    random_click(1600, 760)  # 4C
-    random_click(1560, 905)  # 确定
-    time.sleep(0.5)
-    random_click(370, 985)  # 排序
-    random_click(385, 780)  # 获得时间
-    random_click(730, 935)  # 空白
-    y = 110
-    img = screenshot(1)
-    img1 = cv2.resize(img, (1920, 1080), interpolation=cv2.INTER_AREA)
-    if (img1[993, 649] < [140, 140, 140]).any():
-        random_click(640, 985)  # 反转
-    thread = threading.Thread(target=switch, args=(img1,))
-    while y <= 935:
-        y += addy
-        if y > 935:
-            y = 935
-        random_click(1219, y)
-        random_click(1219, y)
-        if y == 110:
-            thread.start()
-        lock_4c(False)
-        thread.join()
-        if y == 110:
-            y += addy
-    addy = 0
-
-def lock_4c(flag):
-    if flag and len(config.EchoLockConfig["沉日劫明"]["1COST"]) and len(config.EchoLockConfig["沉日劫明"]["3COST"]) and len(config.EchoLockConfig["轻云出月"]["1COST"]) and len(config.EchoLockConfig["轻云出月"]["3COST"])== 0:
-        return
-    for a in range(4):
-        for b in range(6):
-            random_click(275 + 165 * b, 210 + 200 * a)
-            random_click(275 + 165 * b, 210 + 200 * a)
-            img = screenshot(1)
-            img1 = cv2.resize(img, (1920, 1080), interpolation=cv2.INTER_AREA)
-            if (img1[328, 1811] < [150, 150, 150]).all():  # 没锁
-                this_echo_name = check_echo_name(img, 1300, 120, 1600, 170)
-                if "哀声" in this_echo_name:
-                    this_echo_name = this_echo_name[:-1] + "鸷"
-                if "梦" in this_echo_name:
-                    this_echo_name = "梦魇" + this_echo_name[2:]
-                if this_echo_name == "梦魇·燎照之骑":
-                    this_echo_set = "熔山裂谷"
-                elif this_echo_name == "无常凶鹭":
-                    this_echo_set = "轻云出月"
-                elif this_echo_name == "异构武装":
-                    this_echo_set = "凌冽决断之心"
-                elif this_echo_name in ["梦魇·凯尔匹", "共鸣回响·芙露德莉斯"]:
-                    this_echo_set = check_echo_set2(img, 2, ["流云逝尽之空", "愿戴荣光之旅"])
-                else:
-                    this_echo_set = check_echo_set(img, 1300, 675, 1850, 865)  # 识别套装属性
-                    if not this_echo_set:
-                        logger("不是0级忽略", "红", False)
-                        continue
-                if not flag and len(config.EchoLockConfig[this_echo_set]["4COST"]) == 0:
-                        logger(f"{this_echo_set}套不锁定忽略", "红", False)
-                        continue
-                this_echo_cost = check_echo_cost(img, 1750, 460, 1850, 510)  # 识别声骸COST1/3/4
-                if this_echo_cost == "??":
-                    logger(f"{this_echo_set}套不是0级忽略", "红", False)
-                    continue
-                if flag and this_echo_cost == "4":
-                    return
-                this_echo_main_status = check_echo_main_status(img, 1360, 410, 1600, 465)  # 识别主词条
-                if lock_echo_synthesis(this_echo_cost, this_echo_main_status, this_echo_set):
-                    logger(f"{this_echo_set}套 {this_echo_main_status} 锁定", "绿", False)
-                else:
-                    logger(f"{this_echo_set}套 {this_echo_main_status} 不锁定", "红", False)
-            else:
-                return
 
 def everyday():
     from challenge import challenge1, challenge2, challenge3

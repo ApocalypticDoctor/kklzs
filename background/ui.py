@@ -80,151 +80,9 @@ class Ui_MainWindow(QtCore.QObject):
         self.progress_signal.connect(self.update_progress_bar)
         self.name = ""
         self.temp1 = 0
-        self.temp2 = 0
-        self.temp3 = 0
         self.up = 0
         self.flag = False
         self.bossList = config.TargetBoss
-        if os.path.exists("echo_config.yaml"):
-            self.echo0_c1 = config.EchoLockConfig["凝夜白霜"]["1COST"]
-            self.echo0_c3 = config.EchoLockConfig["凝夜白霜"]["3COST"]
-            self.echo0_c4 = config.EchoLockConfig["凝夜白霜"]["4COST"]
-            self.echo1_c1 = config.EchoLockConfig["熔山裂谷"]["1COST"]
-            self.echo1_c3 = config.EchoLockConfig["熔山裂谷"]["3COST"]
-            self.echo1_c4 = config.EchoLockConfig["熔山裂谷"]["4COST"]
-            self.echo2_c1 = config.EchoLockConfig["彻空冥雷"]["1COST"]
-            self.echo2_c3 = config.EchoLockConfig["彻空冥雷"]["3COST"]
-            self.echo2_c4 = config.EchoLockConfig["彻空冥雷"]["4COST"]
-            self.echo3_c1 = config.EchoLockConfig["啸谷长风"]["1COST"]
-            self.echo3_c3 = config.EchoLockConfig["啸谷长风"]["3COST"]
-            self.echo3_c4 = config.EchoLockConfig["啸谷长风"]["4COST"]
-            self.echo4_c1 = config.EchoLockConfig["浮星祛暗"]["1COST"]
-            self.echo4_c3 = config.EchoLockConfig["浮星祛暗"]["3COST"]
-            self.echo4_c4 = config.EchoLockConfig["浮星祛暗"]["4COST"]
-            self.echo5_c1 = config.EchoLockConfig["沉日劫明"]["1COST"]
-            self.echo5_c3 = config.EchoLockConfig["沉日劫明"]["3COST"]
-            self.echo5_c4 = config.EchoLockConfig["沉日劫明"]["4COST"]
-            self.echo6_c1 = config.EchoLockConfig["隐世回光"]["1COST"]
-            self.echo6_c3 = config.EchoLockConfig["隐世回光"]["3COST"]
-            self.echo6_c4 = config.EchoLockConfig["隐世回光"]["4COST"]
-            self.echo7_c1 = config.EchoLockConfig["轻云出月"]["1COST"]
-            self.echo7_c3 = config.EchoLockConfig["轻云出月"]["3COST"]
-            self.echo7_c4 = config.EchoLockConfig["轻云出月"]["4COST"]
-            self.echo8_c1 = config.EchoLockConfig["不绝余音"]["1COST"]
-            self.echo8_c3 = config.EchoLockConfig["不绝余音"]["3COST"]
-            self.echo8_c4 = config.EchoLockConfig["不绝余音"]["4COST"]
-            self.echo9_c1 = config.EchoLockConfig["凌冽决断之心"]["1COST"]
-            self.echo9_c3 = config.EchoLockConfig["凌冽决断之心"]["3COST"]
-            self.echo9_c4 = config.EchoLockConfig["凌冽决断之心"]["4COST"]
-            self.echo10_c1 = config.EchoLockConfig["此间永驻之光"]["1COST"]
-            self.echo10_c3 = config.EchoLockConfig["此间永驻之光"]["3COST"]
-            self.echo10_c4 = config.EchoLockConfig["此间永驻之光"]["4COST"]
-            self.echo11_c1 = config.EchoLockConfig["幽夜隐匿之帷"]["1COST"]
-            self.echo11_c3 = config.EchoLockConfig["幽夜隐匿之帷"]["3COST"]
-            self.echo11_c4 = config.EchoLockConfig["幽夜隐匿之帷"]["4COST"]
-            self.echo12_c1 = config.EchoLockConfig["高天共奏之曲"]["1COST"]
-            self.echo12_c3 = config.EchoLockConfig["高天共奏之曲"]["3COST"]
-            self.echo12_c4 = config.EchoLockConfig["高天共奏之曲"]["4COST"]
-            self.echo13_c1 = config.EchoLockConfig["无惧浪涛之勇"]["1COST"]
-            self.echo13_c3 = config.EchoLockConfig["无惧浪涛之勇"]["3COST"]
-            self.echo13_c4 = config.EchoLockConfig["无惧浪涛之勇"]["4COST"]
-            self.echo14_c1 = config.EchoLockConfig["流云逝尽之空"]["1COST"]
-            self.echo14_c3 = config.EchoLockConfig["流云逝尽之空"]["3COST"]
-            self.echo14_c4 = config.EchoLockConfig["流云逝尽之空"]["4COST"]
-            self.echo15_c1 = config.EchoLockConfig["愿戴荣光之旅"]["1COST"]
-            self.echo15_c3 = config.EchoLockConfig["愿戴荣光之旅"]["3COST"]
-            self.echo15_c4 = config.EchoLockConfig["愿戴荣光之旅"]["4COST"]
-            self.echo16_c1 = config.EchoLockConfig["奔狼燎原之焰"]["1COST"]
-            self.echo16_c3 = config.EchoLockConfig["奔狼燎原之焰"]["3COST"]
-            self.echo16_c4 = config.EchoLockConfig["奔狼燎原之焰"]["4COST"]
-
-            self.pass0 = config.EchoLockConfig["凝夜白霜"]["PASS"]
-            self.pass1 = config.EchoLockConfig["熔山裂谷"]["PASS"]
-            self.pass2 = config.EchoLockConfig["彻空冥雷"]["PASS"]
-            self.pass3 = config.EchoLockConfig["啸谷长风"]["PASS"]
-            self.pass4 = config.EchoLockConfig["浮星祛暗"]["PASS"]
-            self.pass5 = config.EchoLockConfig["沉日劫明"]["PASS"]
-            self.pass6 = config.EchoLockConfig["隐世回光"]["PASS"]
-            self.pass7 = config.EchoLockConfig["轻云出月"]["PASS"]
-            self.pass8 = config.EchoLockConfig["不绝余音"]["PASS"]
-            self.pass9 = config.EchoLockConfig["凌冽决断之心"]["PASS"]
-            self.pass10 = config.EchoLockConfig["此间永驻之光"]["PASS"]
-            self.pass11 = config.EchoLockConfig["幽夜隐匿之帷"]["PASS"]
-            self.pass12 = config.EchoLockConfig["高天共奏之曲"]["PASS"]
-            self.pass13 = config.EchoLockConfig["无惧浪涛之勇"]["PASS"]
-            self.pass14 = config.EchoLockConfig["流云逝尽之空"]["PASS"]
-            self.pass15 = config.EchoLockConfig["愿戴荣光之旅"]["PASS"]
-            self.pass16 = config.EchoLockConfig["奔狼燎原之焰"]["PASS"]
-        else:
-            self.echo0_c1 = []
-            self.echo0_c3 = []
-            self.echo0_c4 = []
-            self.echo1_c1 = []
-            self.echo1_c3 = []
-            self.echo1_c4 = []
-            self.echo2_c1 = []
-            self.echo2_c3 = []
-            self.echo2_c4 = []
-            self.echo3_c1 = []
-            self.echo3_c3 = []
-            self.echo3_c4 = []
-            self.echo4_c1 = []
-            self.echo4_c3 = []
-            self.echo4_c4 = []
-            self.echo5_c1 = []
-            self.echo5_c3 = []
-            self.echo5_c4 = []
-            self.echo6_c1 = []
-            self.echo6_c3 = []
-            self.echo6_c4 = []
-            self.echo7_c1 = []
-            self.echo7_c3 = []
-            self.echo7_c4 = []
-            self.echo8_c1 = []
-            self.echo8_c3 = []
-            self.echo8_c4 = []
-            self.echo9_c1 = []
-            self.echo9_c3 = []
-            self.echo9_c4 = []
-            self.echo10_c1 = []
-            self.echo10_c3 = []
-            self.echo10_c4 = []
-            self.echo11_c1 = []
-            self.echo11_c3 = []
-            self.echo11_c4 = []
-            self.echo12_c1 = []
-            self.echo12_c3 = []
-            self.echo12_c4 = []
-            self.echo13_c1 = []
-            self.echo13_c3 = []
-            self.echo13_c4 = []
-            self.echo14_c1 = []
-            self.echo14_c3 = []
-            self.echo14_c4 = []
-            self.echo15_c1 = []
-            self.echo15_c3 = []
-            self.echo15_c4 = []
-            self.echo16_c1 = []
-            self.echo16_c3 = []
-            self.echo16_c4 = []
-
-            self.pass0 = []
-            self.pass1 = []
-            self.pass2 = []
-            self.pass3 = []
-            self.pass4 = []
-            self.pass5 = []
-            self.pass6 = []
-            self.pass7 = []
-            self.pass8 = []
-            self.pass9 = []
-            self.pass10 = []
-            self.pass11 = []
-            self.pass12 = []
-            self.pass13 = []
-            self.pass14 = []
-            self.pass15 = []
-            self.pass16 = []
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -384,19 +242,11 @@ class Ui_MainWindow(QtCore.QObject):
 
         # 合成按钮
         self.synthesisButton = QtWidgets.QPushButton(self.frame2)
-        self.synthesisButton.setEnabled(False)
-        self.synthesisButton.setGeometry(QtCore.QRect(int(386 * screen), int(645 * screen), int(80 * screen), int(40 * screen)))
+        self.synthesisButton.setGeometry(QtCore.QRect(int(501 * screen), int(645 * screen), int(80 * screen), int(40 * screen)))
         self.synthesisButton.setFont(font)
         # self.synthesisButton.setStyleSheet("background-color: rgb(41, 230, /240)")
         self.synthesisButton.setObjectName("synthesisButton")
 
-        # 锁定按钮
-        self.lockButton = QtWidgets.QPushButton(self.frame2)
-        self.lockButton.setEnabled(False)
-        self.lockButton.setGeometry(QtCore.QRect(int(620 * screen), int(645 * screen), int(80 * screen), int(40 * screen)))
-        self.lockButton.setFont(font)
-        # self.lockButton.setStyleSheet("background-color: rgb(41, 230, 240)")
-        self.lockButton.setObjectName("lockButton")
 
         # 结束按钮
         self.overButton = QtWidgets.QPushButton(self.frame2)
@@ -413,15 +263,10 @@ class Ui_MainWindow(QtCore.QObject):
         self.icon6.setText("")
         self.icon6.setObjectName("icon6")
         self.icon7 = QtWidgets.QLabel(self.frame2)
-        self.icon7.setGeometry(QtCore.QRect(int(390 * screen), int(570 * screen), int(70 * screen), int(70 * screen)))
+        self.icon7.setGeometry(QtCore.QRect(int(505 * screen), int(570 * screen), int(70 * screen), int(70 * screen)))
         self.icon7.setStyleSheet("border-image: url(:/icon/7.png);")
         self.icon7.setText("")
         self.icon7.setObjectName("icon7")
-        self.icon8 = QtWidgets.QLabel(self.frame2)
-        self.icon8.setGeometry(QtCore.QRect(int(622 * screen), int(570 * screen), int(70 * screen), int(70 * screen)))
-        self.icon8.setStyleSheet("border-image: url(:/icon/8.png);")
-        self.icon8.setText("")
-        self.icon8.setObjectName("icon8")
         self.icon9 = QtWidgets.QLabel(self.frame2)
         self.icon9.setGeometry(QtCore.QRect(int(870 * screen), int(570 * screen), int(70 * screen), int(70 * screen)))
         self.icon9.setStyleSheet("border-image: url(:/icon/9.png);")
@@ -542,7 +387,7 @@ class Ui_MainWindow(QtCore.QObject):
         font.setPointSize(int(15 * scale_factor))
         self.boss.setFont(font)
         self.boss.setObjectName("boss")
-        self.bossBox = ComboCheckBox(self.frame3, ["无妄者", "角", "赫卡忒", "芙露德莉斯", "罗蕾莱", "异构武装", "叹息古龙", "荣耀狮像", "梦魇凯尔匹", "梦魇飞廉之猩", "梦魇无常凶鹭", "梦魇云闪之鳞", "梦魇朔雷之鳞", "梦魇无冠者", "梦魇燎照之骑", "梦魇哀声鸷", "梦魇辉萤军势", "鸣钟之龟", "无归的谬误", "朔雷之鳞", "燎照之骑", "无常凶鹭", "辉萤军势", "飞廉之猩", "哀声鸷", "无冠者", "聚械机偶", "云闪之鳞"])
+        self.bossBox = ComboCheckBox(self.frame3, ["无妄者", "角", "赫卡忒", "芙露德莉斯", "梦魇赫卡忒", "罗蕾莱", "异构武装", "叹息古龙", "荣耀狮像", "梦魇凯尔匹", "梦魇飞廉之猩", "梦魇无常凶鹭", "梦魇云闪之鳞", "梦魇朔雷之鳞", "梦魇无冠者", "梦魇燎照之骑", "梦魇哀声鸷", "梦魇辉萤军势", "鸣钟之龟", "无归的谬误", "朔雷之鳞", "燎照之骑", "无常凶鹭", "辉萤军势", "飞廉之猩", "哀声鸷", "无冠者", "聚械机偶", "云闪之鳞"])
         self.bossBox.setGeometry(QtCore.QRect(int(130 * screen), int(105 * screen), int(180 * screen), int(31 * screen)))
         self.bossBox.setObjectName("bossBox")
 
@@ -696,303 +541,6 @@ class Ui_MainWindow(QtCore.QObject):
         self.frame4.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame4.setObjectName("frame4")
 
-        font = QtGui.QFont()
-        font.setFamily("筑紫A丸")
-        font.setPointSize(int(13 * scale_factor))
-        self.costLabel0 = QtWidgets.QLabel(self.frame4)
-        self.costLabel0.setGeometry(QtCore.QRect(int(140 * screen), int(10 * screen), int(100 * screen), int(30 * screen)))
-        self.costLabel0.setStyleSheet("color: rgb(240, 240, 240)")
-        self.costLabel0.setFont(font)
-        self.costLabel0.setObjectName("costLabel0")
-        self.costLabel1 = QtWidgets.QLabel(self.frame4)
-        self.costLabel1.setGeometry(QtCore.QRect(int(280 * screen), int(10 * screen), int(100 * screen), int(30 * screen)))
-        self.costLabel1.setStyleSheet("color: rgb(240, 240, 240)")
-        self.costLabel1.setFont(font)
-        self.costLabel1.setObjectName("costLabel1")
-        self.costLabel2 = QtWidgets.QLabel(self.frame4)
-        self.costLabel2.setGeometry(QtCore.QRect(int(430 * screen), int(10 * screen), int(100 * screen), int(30 * screen)))
-        self.costLabel2.setStyleSheet("color: rgb(240, 240, 240)")
-        self.costLabel2.setFont(font)
-        self.costLabel2.setObjectName("costLabel2")
-        self.costLabel3 = QtWidgets.QLabel(self.frame4)
-        self.costLabel3.setGeometry(QtCore.QRect(int(670 * screen), int(10 * screen), int(100 * screen), int(30 * screen)))
-        self.costLabel3.setStyleSheet("color: rgb(240, 240, 240)")
-        self.costLabel3.setFont(font)
-        self.costLabel3.setObjectName("costLabel3")
-        self.costLabel4 = QtWidgets.QLabel(self.frame4)
-        self.costLabel4.setGeometry(QtCore.QRect(int(820 * screen), int(10 * screen), int(100 * screen), int(30 * screen)))
-        self.costLabel4.setStyleSheet("color: rgb(240, 240, 240)")
-        self.costLabel4.setFont(font)
-        self.costLabel4.setObjectName("costLabel4")
-        self.costLabel5 = QtWidgets.QLabel(self.frame4)
-        self.costLabel5.setGeometry(QtCore.QRect(int(960 * screen), int(10 * screen), int(100 * screen), int(30 * screen)))
-        self.costLabel5.setStyleSheet("color: rgb(240, 240, 240)")
-        self.costLabel5.setFont(font)
-        self.costLabel5.setObjectName("costLabel5")
-
-        self.echo0 = QtWidgets.QLabel(self.frame4)
-        self.echo0.setGeometry(QtCore.QRect(int(20 * screen), int(50 * screen), int(100 * screen), int(30 * screen)))
-        self.echo0.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo0.setFont(font)
-        self.echo0.setObjectName("echo0")
-        self.echo1 = QtWidgets.QLabel(self.frame4)
-        self.echo1.setGeometry(QtCore.QRect(int(560 * screen), int(50 * screen), int(100 * screen), int(30 * screen)))
-        self.echo1.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo1.setFont(font)
-        self.echo1.setObjectName("echo1")
-        self.echo2 = QtWidgets.QLabel(self.frame4)
-        self.echo2.setGeometry(QtCore.QRect(int(20 * screen), int(100 * screen), int(100 * screen), int(30 * screen)))
-        self.echo2.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo2.setFont(font)
-        self.echo2.setObjectName("echo2")
-        self.echo3 = QtWidgets.QLabel(self.frame4)
-        self.echo3.setGeometry(QtCore.QRect(int(560 * screen), int(100 * screen), int(100 * screen), int(30 * screen)))
-        self.echo3.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo3.setFont(font)
-        self.echo3.setObjectName("echo3")
-        self.echo4 = QtWidgets.QLabel(self.frame4)
-        self.echo4.setGeometry(QtCore.QRect(int(20 * screen), int(150 * screen), int(100 * screen), int(30 * screen)))
-        self.echo4.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo4.setFont(font)
-        self.echo4.setObjectName("echo4")
-        self.echo5 = QtWidgets.QLabel(self.frame4)
-        self.echo5.setGeometry(QtCore.QRect(int(560 * screen), int(150 * screen), int(100 * screen), int(30 * screen)))
-        self.echo5.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo5.setFont(font)
-        self.echo5.setObjectName("echo5")
-        self.echo6 = QtWidgets.QLabel(self.frame4)
-        self.echo6.setGeometry(QtCore.QRect(int(20 * screen), int(200 * screen), int(100 * screen), int(30 * screen)))
-        self.echo6.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo6.setFont(font)
-        self.echo6.setObjectName("echo6")
-        self.echo7 = QtWidgets.QLabel(self.frame4)
-        self.echo7.setGeometry(QtCore.QRect(int(560 * screen), int(200 * screen), int(100 * screen), int(30 * screen)))
-        self.echo7.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo7.setFont(font)
-        self.echo7.setObjectName("echo7")
-        self.echo8 = QtWidgets.QLabel(self.frame4)
-        self.echo8.setGeometry(QtCore.QRect(int(20 * screen), int(250 * screen), int(100 * screen), int(30 * screen)))
-        self.echo8.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo8.setFont(font)
-        self.echo8.setObjectName("echo8")
-        self.echo9 = QtWidgets.QLabel(self.frame4)
-        self.echo9.setGeometry(QtCore.QRect(int(540 * screen), int(250 * screen), int(130 * screen), int(30 * screen)))
-        self.echo9.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo9.setFont(font)
-        self.echo9.setObjectName("echo9")
-        self.echo10 = QtWidgets.QLabel(self.frame4)
-        self.echo10.setGeometry(QtCore.QRect(int(0 * screen), int(300 * screen), int(130 * screen), int(30 * screen)))
-        self.echo10.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo10.setFont(font)
-        self.echo10.setObjectName("echo10")
-        self.echo11 = QtWidgets.QLabel(self.frame4)
-        self.echo11.setGeometry(QtCore.QRect(int(540 * screen), int(300 * screen), int(130 * screen), int(30 * screen)))
-        self.echo11.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo11.setFont(font)
-        self.echo11.setObjectName("echo11")
-        self.echo12 = QtWidgets.QLabel(self.frame4)
-        self.echo12.setGeometry(QtCore.QRect(int(0 * screen), int(350 * screen), int(130 * screen), int(30 * screen)))
-        self.echo12.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo12.setFont(font)
-        self.echo12.setObjectName("echo12")
-        self.echo13 = QtWidgets.QLabel(self.frame4)
-        self.echo13.setGeometry(QtCore.QRect(int(540 * screen), int(350 * screen), int(130 * screen), int(30 * screen)))
-        self.echo13.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo13.setFont(font)
-        self.echo13.setObjectName("echo13")
-        self.echo14 = QtWidgets.QLabel(self.frame4)
-        self.echo14.setGeometry(QtCore.QRect(int(0 * screen), int(400 * screen), int(130 * screen), int(30 * screen)))
-        self.echo14.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo14.setFont(font)
-        self.echo14.setObjectName("echo14")
-        self.echo15 = QtWidgets.QLabel(self.frame4)
-        self.echo15.setGeometry(QtCore.QRect(int(540 * screen), int(400 * screen), int(130 * screen), int(30 * screen)))
-        self.echo15.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo15.setFont(font)
-        self.echo15.setObjectName("echo15")
-        self.echo16 = QtWidgets.QLabel(self.frame4)
-        self.echo16.setGeometry(QtCore.QRect(int(0 * screen), int(450 * screen), int(130 * screen), int(30 * screen)))
-        self.echo16.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echo16.setFont(font)
-        self.echo16.setObjectName("echo16")
-        
-
-        self.echo0_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo0_cost1.setGeometry(QtCore.QRect(int(120 * screen), int(50 * screen), int(100 * screen), int(31 * screen)))
-        self.echo0_cost1.setObjectName("echo0_cost1")
-        self.echo0_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo0_cost3.setGeometry(QtCore.QRect(int(250 * screen), int(50 * screen), int(130 * screen), int(31 * screen)))
-        self.echo0_cost3.setObjectName("echo0_cost3")
-        self.echo0_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo0_cost4.setGeometry(QtCore.QRect(int(400 * screen), int(50 * screen), int(130 * screen), int(31 * screen)))
-        self.echo0_cost4.setObjectName("echo0_cost4")
-
-        self.echo1_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo1_cost1.setGeometry(QtCore.QRect(int(660 * screen), int(50 * screen), int(100 * screen), int(31 * screen)))
-        self.echo1_cost1.setObjectName("echo1_cost1")
-        self.echo1_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo1_cost3.setGeometry(QtCore.QRect(int(785 * screen), int(50 * screen), int(130 * screen), int(31 * screen)))
-        self.echo1_cost3.setObjectName("echo1_cost3")
-        self.echo1_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo1_cost4.setGeometry(QtCore.QRect(int(930 * screen), int(50 * screen), int(130 * screen), int(31 * screen)))
-        self.echo1_cost4.setObjectName("echo1_cost4")
-
-        self.echo2_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo2_cost1.setGeometry(QtCore.QRect(int(120 * screen), int(100 * screen), int(100 * screen), int(31 * screen)))
-        self.echo2_cost1.setObjectName("echo2_cost1")
-        self.echo2_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo2_cost3.setGeometry(QtCore.QRect(int(250 * screen), int(100 * screen), int(130 * screen), int(31 * screen)))
-        self.echo2_cost3.setObjectName("echo2_cost3")
-        self.echo2_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo2_cost4.setGeometry(QtCore.QRect(int(400 * screen), int(100 * screen), int(130 * screen), int(31 * screen)))
-        self.echo2_cost4.setObjectName("echo2_cost4")
-
-        self.echo3_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo3_cost1.setGeometry(QtCore.QRect(int(660 * screen), int(100 * screen), int(100 * screen), int(31 * screen)))
-        self.echo3_cost1.setObjectName("echo3_cost1")
-        self.echo3_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo3_cost3.setGeometry(QtCore.QRect(int(785 * screen), int(100 * screen), int(130 * screen), int(31 * screen)))
-        self.echo3_cost3.setObjectName("echo3_cost3")
-        self.echo3_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo3_cost4.setGeometry(QtCore.QRect(int(930 * screen), int(100 * screen), int(130 * screen), int(31 * screen)))
-        self.echo3_cost4.setObjectName("echo3_cost4")
-
-        self.echo4_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo4_cost1.setGeometry(QtCore.QRect(int(120 * screen), int(150 * screen), int(100 * screen), int(31 * screen)))
-        self.echo4_cost1.setObjectName("echo4_cost1")
-        self.echo4_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo4_cost3.setGeometry(QtCore.QRect(int(250 * screen), int(150 * screen), int(130 * screen), int(31 * screen)))
-        self.echo4_cost3.setObjectName("echo4_cost3")
-        self.echo4_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo4_cost4.setGeometry(QtCore.QRect(int(400 * screen), int(150 * screen), int(130 * screen), int(31 * screen)))
-        self.echo4_cost4.setObjectName("echo4_cost4")
-
-        self.echo5_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo5_cost1.setGeometry(QtCore.QRect(int(660 * screen), int(150 * screen), int(100 * screen), int(31 * screen)))
-        self.echo5_cost1.setObjectName("echo5_cost1")
-        self.echo5_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo5_cost3.setGeometry(QtCore.QRect(int(785 * screen), int(150 * screen), int(130 * screen), int(31 * screen)))
-        self.echo5_cost3.setObjectName("echo5_cost3")
-        self.echo5_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo5_cost4.setGeometry(QtCore.QRect(int(930 * screen), int(150 * screen), int(130 * screen), int(31 * screen)))
-        self.echo5_cost4.setObjectName("echo5_cost4")
-
-        self.echo6_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo6_cost1.setGeometry(QtCore.QRect(int(120 * screen), int(200 * screen), int(100 * screen), int(31 * screen)))
-        self.echo6_cost1.setObjectName("echo6_cost1")
-        self.echo6_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo6_cost3.setGeometry(QtCore.QRect(int(250 * screen), int(200 * screen), int(130 * screen), int(31 * screen)))
-        self.echo6_cost3.setObjectName("echo6_cost3")
-        self.echo6_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo6_cost4.setGeometry(QtCore.QRect(int(400 * screen), int(200 * screen), int(130 * screen), int(31 * screen)))
-        self.echo6_cost4.setObjectName("echo6_cost4")
-
-        self.echo7_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo7_cost1.setGeometry(QtCore.QRect(int(660 * screen), int(200 * screen), int(100 * screen), int(31 * screen)))
-        self.echo7_cost1.setObjectName("echo7_cost1")
-        self.echo7_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo7_cost3.setGeometry(QtCore.QRect(int(785 * screen), int(200 * screen), int(130 * screen), int(31 * screen)))
-        self.echo7_cost3.setObjectName("echo7_cost3")
-        self.echo7_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo7_cost4.setGeometry(QtCore.QRect(int(930 * screen), int(200 * screen), int(130 * screen), int(31 * screen)))
-        self.echo7_cost4.setObjectName("echo7_cost4")
-
-        self.echo8_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo8_cost1.setGeometry(QtCore.QRect(int(120 * screen), int(250 * screen), int(100 * screen), int(31 * screen)))
-        self.echo8_cost1.setObjectName("echo8_cost1")
-        self.echo8_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo8_cost3.setGeometry(QtCore.QRect(int(250 * screen), int(250 * screen), int(130 * screen), int(31 * screen)))
-        self.echo8_cost3.setObjectName("echo8_cost3")
-        self.echo8_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo8_cost4.setGeometry(QtCore.QRect(int(400 * screen), int(250 * screen), int(130 * screen), int(31 * screen)))
-        self.echo8_cost4.setObjectName("echo8_cost4")
-
-        self.echo9_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo9_cost1.setGeometry(QtCore.QRect(int(660 * screen), int(250 * screen), int(100 * screen), int(31 * screen)))
-        self.echo9_cost1.setObjectName("echo9_cost1")
-        self.echo9_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo9_cost3.setGeometry(QtCore.QRect(int(785 * screen), int(250 * screen), int(130 * screen), int(31 * screen)))
-        self.echo9_cost3.setObjectName("echo9_cost3")
-        self.echo9_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo9_cost4.setGeometry(QtCore.QRect(int(930 * screen), int(250 * screen), int(130 * screen), int(31 * screen)))
-        self.echo9_cost4.setObjectName("echo9_cost4")
-
-        self.echo10_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo10_cost1.setGeometry(QtCore.QRect(int(120 * screen), int(300 * screen), int(100 * screen), int(31 * screen)))
-        self.echo10_cost1.setObjectName("echo10_cost1")
-        self.echo10_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo10_cost3.setGeometry(QtCore.QRect(int(250 * screen), int(300 * screen), int(130 * screen), int(31 * screen)))
-        self.echo10_cost3.setObjectName("echo10_cost3")
-        self.echo10_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo10_cost4.setGeometry(QtCore.QRect(int(400 * screen), int(300 * screen), int(130 * screen), int(31 * screen)))
-        self.echo10_cost4.setObjectName("echo10_cost4")
-
-        self.echo11_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo11_cost1.setGeometry(QtCore.QRect(int(660 * screen), int(300 * screen), int(100 * screen), int(31 * screen)))
-        self.echo11_cost1.setObjectName("echo11_cost1")
-        self.echo11_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo11_cost3.setGeometry(QtCore.QRect(int(785 * screen), int(300 * screen), int(130 * screen), int(31 * screen)))
-        self.echo11_cost3.setObjectName("echo11_cost3")
-        self.echo11_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo11_cost4.setGeometry(QtCore.QRect(int(930 * screen), int(300 * screen), int(130 * screen), int(31 * screen)))
-        self.echo11_cost4.setObjectName("echo11_cost4")
-
-        self.echo12_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo12_cost1.setGeometry(QtCore.QRect(int(120 * screen), int(350 * screen), int(100 * screen), int(31 * screen)))
-        self.echo12_cost1.setObjectName("echo12_cost1")
-        self.echo12_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo12_cost3.setGeometry(QtCore.QRect(int(250 * screen), int(350 * screen), int(130 * screen), int(31 * screen)))
-        self.echo12_cost3.setObjectName("echo12_cost3")
-        self.echo12_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo12_cost4.setGeometry(QtCore.QRect(int(400 * screen), int(350 * screen), int(130 * screen), int(31 * screen)))
-        self.echo12_cost4.setObjectName("echo12_cost4")
-
-        self.echo13_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo13_cost1.setGeometry(QtCore.QRect(int(660 * screen), int(350 * screen), int(100 * screen), int(31 * screen)))
-        self.echo13_cost1.setObjectName("echo13_cost1")
-        self.echo13_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo13_cost3.setGeometry(QtCore.QRect(int(785 * screen), int(350 * screen), int(130 * screen), int(31 * screen)))
-        self.echo13_cost3.setObjectName("echo13_cost3")
-        self.echo13_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo13_cost4.setGeometry(QtCore.QRect(int(930 * screen), int(350 * screen), int(130 * screen), int(31 * screen)))
-        self.echo13_cost4.setObjectName("echo13_cost4")
-
-        self.echo14_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo14_cost1.setGeometry(QtCore.QRect(int(120 * screen), int(400 * screen), int(100 * screen), int(31 * screen)))
-        self.echo14_cost1.setObjectName("echo14_cost1")
-        self.echo14_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo14_cost3.setGeometry(QtCore.QRect(int(250 * screen), int(400 * screen), int(130 * screen), int(31 * screen)))
-        self.echo14_cost3.setObjectName("echo14_cost3")
-        self.echo14_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo14_cost4.setGeometry(QtCore.QRect(int(400 * screen), int(400 * screen), int(130 * screen), int(31 * screen)))
-        self.echo14_cost4.setObjectName("echo14_cost4")
-
-        self.echo15_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo15_cost1.setGeometry(QtCore.QRect(int(660 * screen), int(400 * screen), int(100 * screen), int(31 * screen)))
-        self.echo15_cost1.setObjectName("echo15_cost1")
-        self.echo15_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo15_cost3.setGeometry(QtCore.QRect(int(785 * screen), int(400 * screen), int(130 * screen), int(31 * screen)))
-        self.echo15_cost3.setObjectName("echo15_cost3")
-        self.echo15_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo15_cost4.setGeometry(QtCore.QRect(int(930 * screen), int(400 * screen), int(130 * screen), int(31 * screen)))
-        self.echo15_cost4.setObjectName("echo15_cost4")
-
-        self.echo16_cost1 = ComboCheckBox(self.frame4, ["攻击", "生命", "防御"])
-        self.echo16_cost1.setGeometry(QtCore.QRect(int(120 * screen), int(450 * screen), int(100 * screen), int(31 * screen)))
-        self.echo16_cost1.setObjectName("echo16_cost1")
-        self.echo16_cost3 = ComboCheckBox(self.frame4,  ["攻击", "生命", "防御", "共鸣效率", "冷凝伤害加成", "热熔伤害加成", "导电伤害加成", "气动伤害加成", "衍射伤害加成", "湮灭伤害加成"])
-        self.echo16_cost3.setGeometry(QtCore.QRect(int(250 * screen), int(450 * screen), int(130 * screen), int(31 * screen)))
-        self.echo16_cost3.setObjectName("echo16_cost3")
-        self.echo16_cost4 = ComboCheckBox(self.frame4,  ["暴击", "暴击伤害", "治疗效果加成", "攻击", "生命", "防御"])
-        self.echo16_cost4.setGeometry(QtCore.QRect(int(400 * screen), int(450 * screen), int(130 * screen), int(31 * screen)))
-        self.echo16_cost4.setObjectName("echo16_cost4")
-        
-        self.echoLabel = QtWidgets.QLabel(self.frame4)
-        self.echoLabel.setGeometry(QtCore.QRect(int(10 * screen), int(670 * screen), int(700 * screen), int(21 * screen)))
-        self.echoLabel.setStyleSheet("color: rgb(240, 240, 240)")
-        self.echoLabel.setFont(font)
-        self.echoLabel.setObjectName("echoLabel")
-
         # 开发
         self.frame5 = QtWidgets.QFrame(self.centralwidget)
         self.frame5.setGeometry(QtCore.QRect(int(120 * screen), int(0 * screen), int(1128 * screen), int(702 * screen)))
@@ -1000,15 +548,6 @@ class Ui_MainWindow(QtCore.QObject):
         self.frame5.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame5.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame5.setObjectName("frame5")
-        self.label = QtWidgets.QLabel(self.frame5)
-        self.label.setGeometry(QtCore.QRect(350, 200, 541, 211))
-        self.label.setGeometry(QtCore.QRect(int(350 * screen), int(200 * screen), int(541 * screen), int(211 * screen)))
-        self.label.setStyleSheet("color: rgb(240, 240, 240)")
-        font = QtGui.QFont()
-        font.setFamily("筑紫A丸")
-        font.setPointSize(72)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
 
         # 日志
         self.frame6 = QtWidgets.QFrame(self.centralwidget)
@@ -1158,69 +697,15 @@ class Ui_MainWindow(QtCore.QObject):
 
         self.bossButton.clicked.connect(self.startBoss)  # type: ignore
         self.synthesisButton.clicked.connect(self.startSynthesis)  # type: ignore
-        self.lockButton.clicked.connect(self.startLock)  # type: ignore
         self.overButton.clicked.connect(self.startOver)  # type: ignore
 
         self.pathButton.clicked.connect(self.openFile)  # type: ignore
         self.bossBox.signa.connect(self.getBoss)  # type: ignore
         self.clearLogButton.clicked.connect(self.clearLog)  # type: ignore
         self.shenmiButton.clicked.connect(self.download)  # type: ignore
-        self.echo0_cost1.signa.connect(self.getEcho0C1)
-        self.echo0_cost3.signa.connect(self.getEcho0C3)
-        self.echo0_cost4.signa.connect(self.getEcho0C4)
-        self.echo1_cost1.signa.connect(self.getEcho1C1)
-        self.echo1_cost3.signa.connect(self.getEcho1C3)
-        self.echo1_cost4.signa.connect(self.getEcho1C4)
-        self.echo2_cost1.signa.connect(self.getEcho2C1)
-        self.echo2_cost3.signa.connect(self.getEcho2C3)
-        self.echo2_cost4.signa.connect(self.getEcho2C4)
-        self.echo3_cost1.signa.connect(self.getEcho3C1)
-        self.echo3_cost3.signa.connect(self.getEcho3C3)
-        self.echo3_cost4.signa.connect(self.getEcho3C4)
-        self.echo4_cost1.signa.connect(self.getEcho4C1)
-        self.echo4_cost3.signa.connect(self.getEcho4C3)
-        self.echo4_cost4.signa.connect(self.getEcho4C4)
-        self.echo5_cost1.signa.connect(self.getEcho5C1)
-        self.echo5_cost3.signa.connect(self.getEcho5C3)
-        self.echo5_cost4.signa.connect(self.getEcho5C4)
-        self.echo6_cost1.signa.connect(self.getEcho6C1)
-        self.echo6_cost3.signa.connect(self.getEcho6C3)
-        self.echo6_cost4.signa.connect(self.getEcho6C4)
-        self.echo7_cost1.signa.connect(self.getEcho7C1)
-        self.echo7_cost3.signa.connect(self.getEcho7C3)
-        self.echo7_cost4.signa.connect(self.getEcho7C4)
-        self.echo8_cost1.signa.connect(self.getEcho8C1)
-        self.echo8_cost3.signa.connect(self.getEcho8C3)
-        self.echo8_cost4.signa.connect(self.getEcho8C4)
-        self.echo9_cost1.signa.connect(self.getEcho9C1)
-        self.echo9_cost3.signa.connect(self.getEcho9C3)
-        self.echo9_cost4.signa.connect(self.getEcho9C4)
-        self.echo10_cost1.signa.connect(self.getEcho10C1)
-        self.echo10_cost3.signa.connect(self.getEcho10C3)
-        self.echo10_cost4.signa.connect(self.getEcho10C4)
-        self.echo11_cost1.signa.connect(self.getEcho11C1)
-        self.echo11_cost3.signa.connect(self.getEcho11C3)
-        self.echo11_cost4.signa.connect(self.getEcho11C4)
-        self.echo12_cost1.signa.connect(self.getEcho12C1)
-        self.echo12_cost3.signa.connect(self.getEcho12C3)
-        self.echo12_cost4.signa.connect(self.getEcho12C4)
-        self.echo13_cost1.signa.connect(self.getEcho13C1)
-        self.echo13_cost3.signa.connect(self.getEcho13C3)
-        self.echo13_cost4.signa.connect(self.getEcho13C4)
-        self.echo14_cost1.signa.connect(self.getEcho14C1)
-        self.echo14_cost3.signa.connect(self.getEcho14C3)
-        self.echo14_cost4.signa.connect(self.getEcho14C4)
-        self.echo15_cost1.signa.connect(self.getEcho15C1)
-        self.echo15_cost3.signa.connect(self.getEcho15C3)
-        self.echo15_cost4.signa.connect(self.getEcho15C4)
-        self.echo16_cost1.signa.connect(self.getEcho16C1)
-        self.echo16_cost3.signa.connect(self.getEcho16C3)
-        self.echo16_cost4.signa.connect(self.getEcho16C4)
         if version_now == version_new:
             self.initConfig()
-            self.initEchoConfig()
         threading.Thread(target=self.saveConfig).start()
-        threading.Thread(target=self.saveEchoConfig).start()
         thread = threading.Thread(target=self.listener)
         thread.daemon = True  # 设置为守护线程
         thread.start()
@@ -1254,7 +739,6 @@ class Ui_MainWindow(QtCore.QObject):
             else:
                 self.up = 2
                 self.initConfig()
-                self.initEchoConfig()
         else:
             msg_box = QMessageBox()
             msg_box.setWindowIcon(QIcon("icon.png"))  # 设置自定义图标
@@ -1271,7 +755,6 @@ class Ui_MainWindow(QtCore.QObject):
         self.name = "boss"
         self.bossButton.setEnabled(False)
         self.synthesisButton.setEnabled(False)
-        self.lockButton.setEnabled(False)
         self.overButton.setEnabled(True)
         threading.Thread(target=self.action).start()
         threading.Thread(target=self.ys).start()
@@ -1280,15 +763,6 @@ class Ui_MainWindow(QtCore.QObject):
         self.name = "合成"
         self.bossButton.setEnabled(False)
         self.synthesisButton.setEnabled(False)
-        self.lockButton.setEnabled(False)
-        self.overButton.setEnabled(True)
-        threading.Thread(target=self.action).start()
-
-    def startLock(self):
-        self.name = "锁定"
-        self.bossButton.setEnabled(False)
-        self.synthesisButton.setEnabled(False)
-        self.lockButton.setEnabled(False)
         self.overButton.setEnabled(True)
         threading.Thread(target=self.action).start()
 
@@ -1317,10 +791,7 @@ class Ui_MainWindow(QtCore.QObject):
         finally:
             if self.temp1:
                 self.bossButton.setEnabled(True)
-            if self.temp2:
-                self.synthesisButton.setEnabled(True)
-            if self.temp3:
-                self.lockButton.setEnabled(True)
+            self.synthesisButton.setEnabled(True)
             self.overButton.setEnabled(False)
         over()
 
@@ -1343,159 +814,6 @@ class Ui_MainWindow(QtCore.QObject):
     def getBoss(self, x):
         self.bossList = x
 
-    def getEcho0C1(self, x):
-        self.echo0_c1 = x
-
-    def getEcho0C3(self, x):
-        self.echo0_c3 = x
-
-    def getEcho0C4(self, x):
-        self.echo0_c4 = x
-
-    def getEcho1C1(self, x):
-        self.echo1_c1 = x
-
-    def getEcho1C3(self, x):
-        self.echo1_c3 = x
-
-    def getEcho1C4(self, x):
-        self.echo1_c4 = x
-
-    def getEcho2C1(self, x):
-        self.echo2_c1 = x
-
-    def getEcho2C3(self, x):
-        self.echo2_c3 = x
-
-    def getEcho2C4(self, x):
-        self.echo2_c4 = x
-
-    def getEcho3C1(self, x):
-        self.echo3_c1 = x
-
-    def getEcho3C3(self, x):
-        self.echo3_c3 = x
-
-    def getEcho3C4(self, x):
-        self.echo3_c4 = x
-
-    def getEcho4C1(self, x):
-        self.echo4_c1 = x
-
-    def getEcho4C3(self, x):
-        self.echo4_c3 = x
-
-    def getEcho4C4(self, x):
-        self.echo4_c4 = x
-
-    def getEcho5C1(self, x):
-        self.echo5_c1 = x
-
-    def getEcho5C3(self, x):
-        self.echo5_c3 = x
-
-    def getEcho5C4(self, x):
-        self.echo5_c4 = x
-
-    def getEcho6C1(self, x):
-        self.echo6_c1 = x
-
-    def getEcho6C3(self, x):
-        self.echo6_c3 = x
-
-    def getEcho6C4(self, x):
-        self.echo6_c4 = x
-
-    def getEcho7C1(self, x):
-        self.echo7_c1 = x
-
-    def getEcho7C3(self, x):
-        self.echo7_c3 = x
-
-    def getEcho7C4(self, x):
-        self.echo7_c4 = x
-
-    def getEcho8C1(self, x):
-        self.echo8_c1 = x
-
-    def getEcho8C3(self, x):
-        self.echo8_c3 = x
-
-    def getEcho8C4(self, x):
-        self.echo8_c4 = x
-
-    def getEcho9C1(self, x):
-        self.echo9_c1 = x
-
-    def getEcho9C3(self, x):
-        self.echo9_c3 = x
-
-    def getEcho9C4(self, x):
-        self.echo9_c4 = x
-
-    def getEcho10C1(self, x):
-        self.echo10_c1 = x
-
-    def getEcho10C3(self, x):
-        self.echo10_c3 = x
-
-    def getEcho10C4(self, x):
-        self.echo10_c4 = x
-
-    def getEcho11C1(self, x):
-        self.echo11_c1 = x
-
-    def getEcho11C3(self, x):
-        self.echo11_c3 = x
-
-    def getEcho11C4(self, x):
-        self.echo11_c4 = x
-
-    def getEcho12C1(self, x):
-        self.echo12_c1 = x
-
-    def getEcho12C3(self, x):
-        self.echo12_c3 = x
-
-    def getEcho12C4(self, x):
-        self.echo12_c4 = x
-
-    def getEcho13C1(self, x):
-        self.echo13_c1 = x
-
-    def getEcho13C3(self, x):
-        self.echo13_c3 = x
-
-    def getEcho13C4(self, x):
-        self.echo13_c4 = x
-
-    def getEcho14C1(self, x):
-        self.echo14_c1 = x
-
-    def getEcho14C3(self, x):
-        self.echo14_c3 = x
-
-    def getEcho14C4(self, x):
-        self.echo14_c4 = x
-
-    def getEcho15C1(self, x):
-        self.echo15_c1 = x
-
-    def getEcho15C3(self, x):
-        self.echo15_c3 = x
-
-    def getEcho15C4(self, x):
-        self.echo15_c4 = x
-
-    def getEcho16C1(self, x):
-        self.echo16_c1 = x
-
-    def getEcho16C3(self, x):
-        self.echo16_c3 = x
-
-    def getEcho16C4(self, x):
-        self.echo16_c4 = x
-        
     def download(self):
         self.shenmiButton.setEnabled(False)
         threading.Thread(target=self.load).start()
@@ -1575,39 +893,13 @@ class Ui_MainWindow(QtCore.QObject):
 "                            每个按键用,分开 一个角色一行"))
         self.bossButton.setText(_translate("MainWindow", "Boss"))
         self.synthesisButton.setText(_translate("MainWindow", "合成"))
-        self.lockButton.setText(_translate("MainWindow", "锁定"))
         self.overButton.setText(_translate("MainWindow", "结束(F6)"))
         self.tips.setText(_translate("MainWindow", "首次使用\n"
 "建议先查看\n"
 "用前必看"))
-        self.echo0.setText(_translate("MainWindow", "凝夜白霜:"))
-        self.echo1.setText(_translate("MainWindow", "熔山裂谷:"))
-        self.echo2.setText(_translate("MainWindow", "彻空冥雷:"))
-        self.echo3.setText(_translate("MainWindow", "啸谷长风:"))
-        self.echo4.setText(_translate("MainWindow", "浮星祛暗:"))
-        self.echo5.setText(_translate("MainWindow", "沉日劫明:"))
-        self.echo6.setText(_translate("MainWindow", "隐世回光:"))
-        self.echo7.setText(_translate("MainWindow", "轻云出月:"))
-        self.echo8.setText(_translate("MainWindow", "不绝余音:"))
-        self.echo9.setText(_translate("MainWindow", "凌冽决断之心:"))
-        self.echo10.setText(_translate("MainWindow", "此间永驻之光:"))
-        self.echo11.setText(_translate("MainWindow", "幽夜隐匿之帷:"))
-        self.echo12.setText(_translate("MainWindow", "高天共奏之曲:"))
-        self.echo13.setText(_translate("MainWindow", "无惧浪涛之勇:"))
-        self.echo14.setText(_translate("MainWindow", "流云逝尽之空:"))
-        self.echo15.setText(_translate("MainWindow", "愿戴荣光之旅:"))
-        self.echo16.setText(_translate("MainWindow", "奔狼燎原之焰:"))
-        self.costLabel0.setText(_translate("MainWindow", "1COST"))
-        self.costLabel1.setText(_translate("MainWindow", "3COST"))
-        self.costLabel2.setText(_translate("MainWindow", "4COST"))
-        self.costLabel3.setText(_translate("MainWindow", "1COST"))
-        self.costLabel4.setText(_translate("MainWindow", "3COST"))
-        self.costLabel5.setText(_translate("MainWindow", "4COST"))
-        self.echoLabel.setText(_translate("MainWindow", "注: 不要指望新角色会用老套装, 用不到的套装就别他妈的勾选了"))
         self.clearLogButton.setText(_translate("MainWindow", "清空"))
         self.shenmiButton.setText(_translate("MainWindow", "神秘按钮"))
         self.echoNum.setText(_translate("MainWindow", '<font color="#f0f0f0">当前声骸<br/>个数: 0</font>'))
-        self.label.setText(_translate("MainWindow", "待开发..."))
         self.progressLabel.setText(_translate("MainWindow", "更新进度条: "))
         self.questionLabel.setText(_translate("MainWindow", "1. 需要管理员模式打开程序才可以正常使用, 初始化时不要关闭\n"
                                                             "2. 游戏窗口必须为16:9, 推荐为1280*720, 镜头重置必须打开\n"
@@ -1654,78 +946,6 @@ class Ui_MainWindow(QtCore.QObject):
         if a == 5:
             self.bossButton.setEnabled(True)
             self.temp1 = 1
-
-    def initEchoConfig(self):
-        a = 0
-        b = 0
-
-        def update(tao, cost, box):
-            if echoConfig[tao][cost]:
-                for i in box.qCheckBox:
-                    if i.text() in echoConfig[tao][cost]:
-                        i.setCheckState(2)
-                return 1
-            return 0
-
-        if os.path.exists("echo_config.yaml"):
-            echoConfig = config.EchoLockConfig
-            a += update("凝夜白霜", "1COST", self.echo0_cost1)
-            a += update("凝夜白霜", "3COST", self.echo0_cost3)
-            b += update("凝夜白霜", "4COST", self.echo0_cost4)
-            a += update("熔山裂谷", "1COST", self.echo1_cost1)
-            a += update("熔山裂谷", "3COST", self.echo1_cost3)
-            b += update("熔山裂谷", "4COST", self.echo1_cost4)
-            a += update("彻空冥雷", "1COST", self.echo2_cost1)
-            a += update("彻空冥雷", "3COST", self.echo2_cost3)
-            b += update("彻空冥雷", "4COST", self.echo2_cost4)
-            a += update("啸谷长风", "1COST", self.echo3_cost1)
-            a += update("啸谷长风", "3COST", self.echo3_cost3)
-            b += update("啸谷长风", "4COST", self.echo3_cost4)
-            a += update("浮星祛暗", "1COST", self.echo4_cost1)
-            a += update("浮星祛暗", "3COST", self.echo4_cost3)
-            b += update("浮星祛暗", "4COST", self.echo4_cost4)
-            a += update("沉日劫明", "1COST", self.echo5_cost1)
-            a += update("沉日劫明", "3COST", self.echo5_cost3)
-            b += update("沉日劫明", "4COST", self.echo5_cost4)
-            a += update("隐世回光", "1COST", self.echo6_cost1)
-            a += update("隐世回光", "3COST", self.echo6_cost3)
-            b += update("隐世回光", "4COST", self.echo6_cost4)
-            a += update("轻云出月", "1COST", self.echo7_cost1)
-            a += update("轻云出月", "3COST", self.echo7_cost3)
-            b += update("轻云出月", "4COST", self.echo7_cost4)
-            a += update("不绝余音", "1COST", self.echo8_cost1)
-            a += update("不绝余音", "3COST", self.echo8_cost3)
-            b += update("不绝余音", "4COST", self.echo8_cost4)
-            a += update("凌冽决断之心", "1COST", self.echo9_cost1)
-            a += update("凌冽决断之心", "3COST", self.echo9_cost3)
-            b += update("凌冽决断之心", "4COST", self.echo9_cost4)
-            a += update("此间永驻之光", "1COST", self.echo10_cost1)
-            a += update("此间永驻之光", "3COST", self.echo10_cost3)
-            b += update("此间永驻之光", "4COST", self.echo10_cost4)
-            a += update("幽夜隐匿之帷", "1COST", self.echo11_cost1)
-            a += update("幽夜隐匿之帷", "3COST", self.echo11_cost3)
-            b += update("幽夜隐匿之帷", "4COST", self.echo11_cost4)
-            a += update("高天共奏之曲", "1COST", self.echo12_cost1)
-            a += update("高天共奏之曲", "3COST", self.echo12_cost3)
-            b += update("高天共奏之曲", "4COST", self.echo12_cost4)
-            a += update("无惧浪涛之勇", "1COST", self.echo13_cost1)
-            a += update("无惧浪涛之勇", "3COST", self.echo13_cost3)
-            b += update("无惧浪涛之勇", "4COST", self.echo13_cost4)
-            a += update("流云逝尽之空", "1COST", self.echo14_cost1)
-            a += update("流云逝尽之空", "3COST", self.echo14_cost3)
-            b += update("流云逝尽之空", "4COST", self.echo14_cost4)
-            a += update("愿戴荣光之旅", "1COST", self.echo15_cost1)
-            a += update("愿戴荣光之旅", "3COST", self.echo15_cost3)
-            b += update("愿戴荣光之旅", "4COST", self.echo15_cost4)
-            a += update("奔狼燎原之焰", "1COST", self.echo16_cost1)
-            a += update("奔狼燎原之焰", "3COST", self.echo16_cost3)
-            b += update("奔狼燎原之焰", "4COST", self.echo16_cost4)
-            if a:
-                self.synthesisButton.setEnabled(True)
-                self.temp2 = 1
-            if b:
-                self.lockButton.setEnabled(True)
-                self.temp3 = 1
 
     def saveConfig(self):
         basicConfig = {}
@@ -1774,139 +994,6 @@ class Ui_MainWindow(QtCore.QObject):
                         self.bossButton.setEnabled(False)
                     basicConfig = temp
                     with open('config.yaml', 'w', encoding="utf-8") as f:
-                        yaml.dump(basicConfig, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
-            except:
-                return
-
-    def saveEchoConfig(self):
-        basicConfig = config.EchoLockConfig
-        while True:
-            try:
-                time.sleep(1)
-                self.path.text()
-                temp = {
-                    "凝夜白霜": {
-                        "1COST": self.echo0_c1,
-                        "3COST": self.echo0_c3,
-                        "4COST": self.echo0_c4,
-                        "PASS": self.pass0
-                    },
-                    "熔山裂谷": {
-                        "1COST": self.echo1_c1,
-                        "3COST": self.echo1_c3,
-                        "4COST": self.echo1_c4,
-                        "PASS": self.pass1
-                    },
-                    "彻空冥雷": {
-                        "1COST": self.echo2_c1,
-                        "3COST": self.echo2_c3,
-                        "4COST": self.echo2_c4,
-                        "PASS": self.pass2
-                    },
-                    "啸谷长风": {
-                        "1COST": self.echo3_c1,
-                        "3COST": self.echo3_c3,
-                        "4COST": self.echo3_c4,
-                        "PASS": self.pass3
-                    },
-                    "浮星祛暗": {
-                        "1COST": self.echo4_c1,
-                        "3COST": self.echo4_c3,
-                        "4COST": self.echo4_c4,
-                        "PASS": self.pass4
-                    },
-                    "沉日劫明": {
-                        "1COST": self.echo5_c1,
-                        "3COST": self.echo5_c3,
-                        "4COST": self.echo5_c4,
-                        "PASS": self.pass5
-                    },
-                    "隐世回光": {
-                        "1COST": self.echo6_c1,
-                        "3COST": self.echo6_c3,
-                        "4COST": self.echo6_c4,
-                        "PASS": self.pass6
-                    },
-                    "轻云出月": {
-                        "1COST": self.echo7_c1,
-                        "3COST": self.echo7_c3,
-                        "4COST": self.echo7_c4,
-                        "PASS": self.pass7
-                    },
-                    "不绝余音": {
-                        "1COST": self.echo8_c1,
-                        "3COST": self.echo8_c3,
-                        "4COST": self.echo8_c4,
-                        "PASS": self.pass8
-                    },
-                    "凌冽决断之心": {
-                        "1COST": self.echo9_c1,
-                        "3COST": self.echo9_c3,
-                        "4COST": self.echo9_c4,
-                        "PASS": self.pass9
-                    },
-                    "此间永驻之光": {
-                        "1COST": self.echo10_c1,
-                        "3COST": self.echo10_c3,
-                        "4COST": self.echo10_c4,
-                        "PASS": self.pass10
-                    },
-                    "幽夜隐匿之帷": {
-                        "1COST": self.echo11_c1,
-                        "3COST": self.echo11_c3,
-                        "4COST": self.echo11_c4,
-                        "PASS": self.pass11
-                    },
-                    "高天共奏之曲": {
-                        "1COST": self.echo12_c1,
-                        "3COST": self.echo12_c3,
-                        "4COST": self.echo12_c4,
-                        "PASS": self.pass12
-                    },
-                    "无惧浪涛之勇": {
-                        "1COST": self.echo13_c1,
-                        "3COST": self.echo13_c3,
-                        "4COST": self.echo13_c4,
-                        "PASS": self.pass13
-                    },
-                    "流云逝尽之空": {
-                        "1COST": self.echo14_c1,
-                        "3COST": self.echo14_c3,
-                        "4COST": self.echo14_c4,
-                        "PASS": self.pass14
-                    },
-                    "愿戴荣光之旅": {
-                        "1COST": self.echo15_c1,
-                        "3COST": self.echo15_c3,
-                        "4COST": self.echo15_c4,
-                        "PASS": self.pass15
-                    },
-                    "奔狼燎原之焰": {
-                        "1COST": self.echo16_c1,
-                        "3COST": self.echo16_c3,
-                        "4COST": self.echo16_c4,
-                        "PASS": self.pass16
-                    }
-                }
-                if basicConfig != temp:
-                    a = len(self.echo0_c1 + self.echo0_c3 + self.echo1_c1 + self.echo1_c3 + self.echo2_c1 + self.echo2_c3 + self.echo3_c1 + self.echo3_c3 + self.echo4_c1 + self.echo4_c3 + self.echo5_c1 + self.echo5_c3 + self.echo6_c1 + self.echo6_c3 + self.echo7_c1 + self.echo7_c3 + self.echo8_c1 + self.echo8_c3 + self.echo9_c1 + self.echo9_c3 + self.echo10_c1 + self.echo10_c3 + self.echo11_c1 + self.echo11_c3 + self.echo12_c1 + self.echo12_c3 + self.echo13_c1 + self.echo13_c3 + self.echo14_c1 + self.echo14_c3 + self.echo15_c1 + self.echo15_c3 + self.echo16_c1 + self.echo16_c3)
-                    b = len(self.echo0_c4 + self.echo1_c4 + self.echo2_c4 + self.echo3_c4 + self.echo4_c4 + self.echo5_c4 + self.echo6_c4 + self.echo7_c4 + self.echo8_c4 + self.echo9_c4 + self.echo10_c4 + self.echo11_c4 + self.echo12_c4 + self.echo13_c4 + self.echo14_c4 + self.echo15_c4 + self.echo16_c4)
-                    if a:
-                        self.temp2 = 1
-                        if self.name in ["", "over"]:
-                            self.synthesisButton.setEnabled(True)
-                    else:
-                        self.temp2 = 0
-                        self.synthesisButton.setEnabled(False)
-                    if b:
-                        if self.name in ["", "over"]:
-                            self.lockButton.setEnabled(True)
-                        self.temp3 = 1
-                    else:
-                        self.lockButton.setEnabled(False)
-                        self.temp3 = 0
-                    basicConfig = temp
-                    with open('echo_config.yaml', 'w', encoding="utf-8") as f:
                         yaml.dump(basicConfig, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
             except:
                 return

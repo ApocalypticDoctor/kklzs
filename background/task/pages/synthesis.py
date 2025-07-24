@@ -1,3 +1,4 @@
+import time
 
 from . import *
 
@@ -111,10 +112,8 @@ def get_echoes(positions: dict[str, Position]) -> bool:
     :param positions:
     :return:
     """
-    control.activate()
-    time.sleep(1)
-    echo_synthesis()
-    time.sleep(1)
+    control.esc()
+    time.sleep(0.3)
     return True
 
 

@@ -6,8 +6,7 @@ from constant import width_ratio, height_ratio
 from status import logger, info
 from control import control
 from config import config
-from utils import wait_home, forward, random_click, screenshot, jinru, find_text, release_skills, lock_4c, tempy, \
-    find_pic, template_pic
+from utils import wait_home, forward, random_click, screenshot, jinru, find_text, release_skills, find_pic, template_pic
 
 def challenge1():
     if config.TargetChallenge == "迅刀":

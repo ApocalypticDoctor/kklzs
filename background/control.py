@@ -2,8 +2,6 @@ import time
 import win32gui
 import win32con
 import win32api
-
-from background.constant import width_ratio, height_ratio
 from constant import hwnd
 
 

@@ -3,7 +3,7 @@ from os import environ
 
 from mouse_reset import mouse_reset
 from multiprocessing import Event, Process, current_process, Queue
-from task import boss_task, synthesis_task, echo_lock4c_task
+from task import boss_task, synthesis_task
 from win32con import WM_CLOSE
 from subprocess import Popen
 from schema import Task
@@ -81,7 +81,7 @@ def run(task: Task, e: Event, q: Queue, ok: bool = False):
             temp = [(20, 265, 320, 310), (660, 10, 1260, 80)]
     elif current_process().name == "合成":
         # 合成 结束 全选 高级 获得
-        temp = [(1330, 965, 1450, 1010), (830, 190, 1088, 235), (470, 970, 530, 1020), (870, 575, 1075, 615), (880, 150, 1040, 540)]
+        temp = [(1420, 310, 1545, 370), (830, 190, 1088, 235), (470, 970, 530, 1020), (870, 575, 1075, 615), (880, 150, 1040, 540)]
     try:
         while e.is_set():
             img = screenshot()
@@ -141,8 +141,4 @@ def start(name):
     elif name == "合成":
         logger("启动合成脚本")
         thread = Process(target=run, args=(synthesis_task, taskEvent, queue), name="合成")
-        thread.start()
-    elif name == "锁定":
-        logger("启动锁定脚本")
-        thread = Process(target=run, args=(echo_lock4c_task, taskEvent, queue), name="锁定")
         thread.start()

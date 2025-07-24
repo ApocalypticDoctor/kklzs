@@ -21,8 +21,6 @@ class StatusInfo(BaseModel):
     waveplate: int = Field(-1, title="体力")
     waveplates: int = Field(0, title="消耗体力")
     echoNum: int = Field(0, title="声骸数量")
-    echoLockNum: int = Field(0, title="锁定声骸数量")
-    taoNums: dict = Field({}, title="各套个数")
     fighttype: str = Field("", title="战斗类型")
     overflag: bool = Field(False, title="结束标志")
     q: Queue = Field(None)
@@ -30,13 +28,11 @@ class StatusInfo(BaseModel):
 
 info = StatusInfo()
 lastMsg = ""
-tao = list(config.EchoLockConfig.keys())
-for t in tao:
-    info.taoNums[t] = 0
 
 
 def logger(msg: str, color: str = '', flag=True):
     global lastMsg
+    msg = str(msg)
     if "当前声骸为" in msg:
         content = f"{datetime.now().strftime('%m-%d %H:%M:%S')} "
     else:
@@ -46,8 +42,6 @@ def logger(msg: str, color: str = '', flag=True):
             f"吸收次数: {info.absorptionCount} "
         )
 
-    if info.echoLockNum != 0:
-        content += f"锁定个数: {info.echoLockNum} "
     content += f"{msg}"
     start = "\n" if lastMsg != msg else "\r"
     content1 = start + content

@@ -239,9 +239,6 @@ class Task(BaseModel):
                         page.action(page.matchPositions)
                         if config.Automatic:
                             logger("合成结束,即将自动启动Boss脚本", "蓝")
-                        for k, v in info.taoNums.items():
-                            if v != 0:
-                                logger(k + "套共锁定" + str(v) + "个", "蓝")
                         return 1
                     if info.echoNum >= 3000:
                         logger("背包上限,即将自动启动合成脚本", "蓝")
@@ -255,9 +252,6 @@ class Task(BaseModel):
                 if match_conditional_action:
                     logger(f"当前条件操作: {conditionalAction.name}")
                     conditionalAction.action()
-                    if conditionalAction.name == "4C锁定" and config.Automatic:
-                        logger("锁定结束,即将自动启动Boss脚本", "蓝")
-                        return 1
                     return
         except Exception as e:
             logger(str(e) + " task", "红")
