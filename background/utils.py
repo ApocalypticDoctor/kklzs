@@ -248,6 +248,7 @@ def transfer_to_boss():
         forward(0.5, "a")
         control.tap("f")
         control.tap("f")
+        time.sleep(1)
         wait_home()
     else:
         move_boss()
