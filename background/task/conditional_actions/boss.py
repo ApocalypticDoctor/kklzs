@@ -13,7 +13,6 @@ def judgment_idle_action() -> bool:
 
 
 def judgment_idle() -> bool:
-    logger((datetime.now() - info.lastFightTime).seconds)
     return (datetime.now() - info.lastFightTime).seconds > config.MaxIdleTime
 
 
